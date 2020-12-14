@@ -1,0 +1,9 @@
+{
+  "name": "budget-tracker",
+  "workspaces": ["client"],
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Ahsan",
+  "license": "MIT",
+  "private": true
+}

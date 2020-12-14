@@ -1,0 +1,28 @@
+.AddTransaction{
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.AddTransaction form{
+    margin: 0 auto;
+    width: 60vw;
+    align-items: center;
+    justify-content: center;
+    border: 1px;
+    border-color: white;
+}
+.AddTransaction input {
+    line-height: large;
+    padding-top: 1%;
+    padding-bottom: 1%;
+}
+.AddTransaction input , .AddTransaction label {
+    display: block;
+    margin: auto;
+    width: 40vw;
+    margin-top: 1vh;
+}
+.AddTransaction .bigMarginV{
+    margin-top: 3vh;
+}
