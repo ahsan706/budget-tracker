@@ -1,9 +1,20 @@
 {
   "name": "budget-tracker",
-  "workspaces": ["client"],
+  "workspaces": [
+    "client",
+    "server"
+  ],
+  
+  "scripts": {
+    "client": "cd packages/client && yarn start",
+    "server": "cd packages/server && yarn start",
+    "dev": "concurrently \"yarn server\" \"yarn client\""
+  },
   "version": "1.0.0",
-  "main": "index.js",
   "author": "Ahsan",
   "license": "MIT",
-  "private": true
+  "private": true,
+  "devDependencies": {
+    "concurrently": "^5.3.0"
+  }
 }
