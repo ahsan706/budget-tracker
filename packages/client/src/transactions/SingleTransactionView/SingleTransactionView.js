@@ -1,6 +1,30 @@
 import React from "react";
 import PropTypes from "prop-types";
-import "./SingleTransactionView.css";
+import Dialog from "@material-ui/core/Dialog";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import IconButton from "@material-ui/core/IconButton";
+import CloseIcon from "@material-ui/icons/Close";
+import InputLabel from "@material-ui/core/InputLabel";
+import FilledInput from "@material-ui/core/FilledInput";
+import Button from "@material-ui/core/Button";
+import { withStyles } from "@material-ui/core/styles";
+const styles = (theme) => ({
+  root: {
+    width: "60vw",
+    padding : theme.spacing(2),
+    display: "flex",
+    "flex-direction": "column"
+  },
+  marginTop: {
+    "margin-top": theme.spacing(4),
+  },
+  topRight: {
+    position: "absolute",
+    right: 0,
+    top: 0,
+    color: theme.palette.grey[500],
+  }
+});
 class SingleTransactionView extends React.Component {
   constructor(props) {
     super(props);
@@ -11,7 +35,6 @@ class SingleTransactionView extends React.Component {
       transactionDate: "",
       isEditMode: false,
     };
-    this.dialog = React.createRef();
   }
   componentDidUpdate(prevProps) {
     if (this.props.editTransaction === undefined && this.state.id !== -1) {
@@ -24,9 +47,13 @@ class SingleTransactionView extends React.Component {
         isEditMode: false,
       });
     } else {
-      if ((prevProps.editTransaction === undefined  || this.props.editTransaction.id !== prevProps.editTransaction.id) && this.props.editTransaction !== undefined)
-      this.setState({
-        ...this.state,
+      if (
+        (prevProps.editTransaction === undefined ||
+          this.props.editTransaction.id !== prevProps.editTransaction.id) &&
+        this.props.editTransaction !== undefined
+      )
+        this.setState({
+          ...this.state,
           id: this.props.editTransaction.id,
           description: this.props.editTransaction.description,
           amount: this.props.editTransaction.amount,
@@ -65,17 +92,20 @@ class SingleTransactionView extends React.Component {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(this.getStateForServer(this.state)),
-    })
-      const transaction = await response.json();
-      this.props.updatedOrCreatedTransaction(transaction);
-      this.hideModal();
+    });
+    const transaction = await response.json();
+    this.props.updatedOrCreatedTransaction(transaction);
+    this.handleClose();
   }
-  showDialog() {
-    this.dialog.current.showModal();
-  }
-  hideModal() {
+  handleClose() {
     this.props.dialogClosed();
-    this.dialog.current.close();
+  }
+  getTileText(isEditMode) {
+    if (isEditMode) {
+      return "Edit Transaction";
+    } else {
+      return "Add Transaction";
+    }
   }
   getButtonText(isEditMode) {
     if (isEditMode) {
@@ -93,50 +123,57 @@ class SingleTransactionView extends React.Component {
   }
   render() {
     return (
-      <dialog ref={this.dialog} className="SingleViewTransaction">
-        <form onSubmit={(e) => this.formSubmit(e)} method="POST">
-          <fieldset>
-          <label>Description</label>
-          <input
+      <Dialog onClose={() => this.handleClose()} open={this.props.open}>
+        <DialogTitle id="simple-dialog-title">
+          {this.getTileText(this.state.isEditMode)}
+        </DialogTitle>
+
+        <form
+          onSubmit={(e) => this.formSubmit(e)}
+          method="POST"
+          className={this.props.classes.root}
+        >
+          <InputLabel className={this.props.classes.marginTop}>
+            Description
+          </InputLabel>
+          <FilledInput
             type="text"
             name="description"
             onChange={this.myChangeHandler}
             defaultValue={this.getFromPropsOrDefaultValue("description")}
           />
-          <label>Amount</label>
-          <input
+          <InputLabel className={this.props.classes.marginTop}>
+            Amount
+          </InputLabel>
+          <FilledInput
             type="text"
             name="amount"
             onChange={this.myChangeHandler}
             defaultValue={this.getFromPropsOrDefaultValue("amount")}
           />
-          <label>Date</label>
-          <input
+          <InputLabel className={this.props.classes.marginTop}>Date</InputLabel>
+          <FilledInput
             type="date"
             name="transactionDate"
             onChange={this.myChangeHandler}
             defaultValue={this.getFromPropsOrDefaultValue("transactionDate")}
           />
-          <input
-            type="submit"
-            value={this.getButtonText(this.state.isEditMode)}
-            className="bigMarginV"
-          />
-          </fieldset>
+          <Button variant="contained" className={this.props.classes.marginTop}>
+            {this.getButtonText(this.state.isEditMode)}
+          </Button>
         </form>
-        <span
-          onClick={() => this.hideModal()}
-          className="close topRight"
-        >
-        </span>
-      </dialog>
+        <IconButton onClick={() => this.handleClose()}className={this.props.classes.topRight}>
+        <CloseIcon/>
+        </IconButton>
+      </Dialog>
     );
   }
 }
 SingleTransactionView.propTypes = {
   editTransaction: PropTypes.any,
   updatedOrCreatedTransaction: PropTypes.func,
-  dialogClosed: PropTypes.func
-
+  dialogClosed: PropTypes.func,
+  open: PropTypes.bool,
+  classes: PropTypes.object.isRequired,
 };
-export default SingleTransactionView;
+export default withStyles(styles)(SingleTransactionView);
