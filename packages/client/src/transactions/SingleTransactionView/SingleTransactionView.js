@@ -1,38 +1,38 @@
-import React from "react";
-import PropTypes from "prop-types";
-import Dialog from "@material-ui/core/Dialog";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import IconButton from "@material-ui/core/IconButton";
-import CloseIcon from "@material-ui/icons/Close";
-import InputLabel from "@material-ui/core/InputLabel";
-import FilledInput from "@material-ui/core/FilledInput";
-import Button from "@material-ui/core/Button";
-import { withStyles } from "@material-ui/core/styles";
+import React from 'react';
+import PropTypes from 'prop-types';
+import Dialog from '@material-ui/core/Dialog';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
+import InputLabel from '@material-ui/core/InputLabel';
+import FilledInput from '@material-ui/core/FilledInput';
+import Button from '@material-ui/core/Button';
+import {withStyles} from '@material-ui/core/styles';
 const styles = (theme) => ({
   root: {
-    width: "60vw",
-    padding : theme.spacing(2),
-    display: "flex",
-    "flex-direction": "column"
+    'width': '60vw',
+    'padding': theme.spacing(2),
+    'display': 'flex',
+    'flex-direction': 'column',
   },
   marginTop: {
-    "margin-top": theme.spacing(4),
+    'margin-top': theme.spacing(4),
   },
   topRight: {
-    position: "absolute",
+    position: 'absolute',
     right: 0,
     top: 0,
     color: theme.palette.grey[500],
-  }
+  },
 });
 class SingleTransactionView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       id: -1,
-      description: "",
-      amount: "",
-      transactionDate: "",
+      description: '',
+      amount: '',
+      transactionDate: '',
       isEditMode: false,
     };
   }
@@ -41,9 +41,9 @@ class SingleTransactionView extends React.Component {
       this.setState({
         ...this.state,
         id: -1,
-        description: "",
-        amount: "",
-        transactionDate: "",
+        description: '',
+        amount: '',
+        transactionDate: '',
         isEditMode: false,
       });
     } else {
@@ -51,7 +51,7 @@ class SingleTransactionView extends React.Component {
         (prevProps.editTransaction === undefined ||
           this.props.editTransaction.id !== prevProps.editTransaction.id) &&
         this.props.editTransaction !== undefined
-      )
+      ) {
         this.setState({
           ...this.state,
           id: this.props.editTransaction.id,
@@ -60,36 +60,37 @@ class SingleTransactionView extends React.Component {
           transactionDate: this.props.editTransaction.transactionDate,
           isEditMode: true,
         });
+      }
     }
   }
-  myChangeHandler = (event) => {
-    let nam = event.target.name;
-    let val = event.target.value;
-    this.setState({ [nam]: val });
+  myChangeHandler(event) {
+    const name = event.target.name;
+    const value = event.target.value;
+    this.setState({[name]: value});
   };
   getStateForServer(state) {
-    const allowed = ["description", "amount", "transactionDate", "id"];
+    const allowed = ['description', 'amount', 'transactionDate', 'id'];
 
     const filtered = Object.keys(state)
-      .filter((key) => allowed.includes(key))
-      .reduce((obj, key) => {
-        obj[key] = state[key];
-        return obj;
-      }, {});
+        .filter((key) => allowed.includes(key))
+        .reduce((obj, key) => {
+          obj[key] = state[key];
+          return obj;
+        }, {});
     return filtered;
   }
   async formSubmit(event) {
     event.preventDefault();
-    let url = "http://localhost:8080/addTransaction";
-    let httpMethod = "POST";
+    let url = 'http://localhost:8080/addTransaction';
+    let httpMethod = 'POST';
     if (this.state.isEditMode) {
-      url = "http://localhost:8080/editTransaction";
-      httpMethod = "PUT";
+      url = 'http://localhost:8080/editTransaction';
+      httpMethod = 'PUT';
     }
     const response = await fetch(url, {
       method: httpMethod,
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(this.getStateForServer(this.state)),
     });
@@ -102,16 +103,16 @@ class SingleTransactionView extends React.Component {
   }
   getTileText(isEditMode) {
     if (isEditMode) {
-      return "Edit Transaction";
+      return 'Edit Transaction';
     } else {
-      return "Add Transaction";
+      return 'Add Transaction';
     }
   }
   getButtonText(isEditMode) {
     if (isEditMode) {
-      return "Edit";
+      return 'Edit';
     } else {
-      return "Add";
+      return 'Add';
     }
   }
   getFromPropsOrDefaultValue(key) {
@@ -140,7 +141,7 @@ class SingleTransactionView extends React.Component {
             type="text"
             name="description"
             onChange={this.myChangeHandler}
-            defaultValue={this.getFromPropsOrDefaultValue("description")}
+            defaultValue={this.getFromPropsOrDefaultValue('description')}
           />
           <InputLabel className={this.props.classes.marginTop}>
             Amount
@@ -149,21 +150,21 @@ class SingleTransactionView extends React.Component {
             type="text"
             name="amount"
             onChange={this.myChangeHandler}
-            defaultValue={this.getFromPropsOrDefaultValue("amount")}
+            defaultValue={this.getFromPropsOrDefaultValue('amount')}
           />
           <InputLabel className={this.props.classes.marginTop}>Date</InputLabel>
           <FilledInput
             type="date"
             name="transactionDate"
             onChange={this.myChangeHandler}
-            defaultValue={this.getFromPropsOrDefaultValue("transactionDate")}
+            defaultValue={this.getFromPropsOrDefaultValue('transactionDate')}
           />
           <Button variant="contained" className={this.props.classes.marginTop}>
             {this.getButtonText(this.state.isEditMode)}
           </Button>
         </form>
         <IconButton onClick={() => this.handleClose()}className={this.props.classes.topRight}>
-        <CloseIcon/>
+          <CloseIcon/>
         </IconButton>
       </Dialog>
     );

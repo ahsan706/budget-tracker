@@ -1,17 +1,17 @@
-import React from "react";
-import PropTypes from "prop-types";
-import Table from "@material-ui/core/Table";
-import TableHead from "@material-ui/core/TableHead";
-import TableBody from "@material-ui/core/TableBody";
-import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell";
-import IconButton from "@material-ui/core/IconButton";
-import EditIcon from "@material-ui/icons/Edit";
-import DeleteIcon from "@material-ui/icons/Delete";
-import TableContainer from "@material-ui/core/TableContainer";
-import Grid from "@material-ui/core/Grid";
-import Typography from "@material-ui/core/Typography";
-import { withStyles } from "@material-ui/core/styles";
+import React from 'react';
+import PropTypes from 'prop-types';
+import Table from '@material-ui/core/Table';
+import TableHead from '@material-ui/core/TableHead';
+import TableBody from '@material-ui/core/TableBody';
+import TableRow from '@material-ui/core/TableRow';
+import TableCell from '@material-ui/core/TableCell';
+import IconButton from '@material-ui/core/IconButton';
+import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/Delete';
+import TableContainer from '@material-ui/core/TableContainer';
+import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
+import {withStyles} from '@material-ui/core/styles';
 const StyledTableCell = withStyles((theme) => ({
   head: {
     backgroundColor: theme.palette.common.black,
@@ -24,14 +24,14 @@ const StyledTableCell = withStyles((theme) => ({
 
 const StyledTableRow = withStyles((theme) => ({
   root: {
-    "&:nth-of-type(even)": {
+    '&:nth-of-type(even)': {
       backgroundColor: theme.palette.action.hover,
     },
   },
 }))(TableRow);
 const styles = () => ({
   root: {
-    width: "100%",
+    width: '100%',
   },
 });
 class ViewTransaction extends React.Component {
@@ -54,35 +54,35 @@ class ViewTransaction extends React.Component {
   }
   async componentDidMount() {
     const response = await (
-      await fetch("http://localhost:8080/getAllTransaction")
+      await fetch('http://localhost:8080/getAllTransaction')
     ).json();
-    this.setState({ transactions: response });
+    this.setState({transactions: response});
   }
   onEditTransaction(id) {
     this.props.editTransaction(
-      this.state.transactions.find((transaction) => transaction.id === id)
+        this.state.transactions.find((transaction) => transaction.id === id),
     );
   }
   async onDeleteTransaction(id) {
-    await fetch("http://localhost:8080/deleteTransaction", {
-      method: "DELETE",
+    await fetch('http://localhost:8080/deleteTransaction', {
+      method: 'DELETE',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ id }),
+      body: JSON.stringify({id}),
     });
-    let transactions = [...this.state.transactions];
+    const transactions = [...this.state.transactions];
     const indexOfTransaction = transactions.findIndex(
-      (transaction) => transaction.id === id
+        (transaction) => transaction.id === id,
     );
     transactions.splice(indexOfTransaction, 1);
-    this.setState({ transactions });
+    this.setState({transactions});
   }
   renderTableData(transactions) {
     const tableList = [];
     tableList.push();
     const tableData = transactions.map((transaction) => {
-      const { id, description, amount, transactionDate } = transaction;
+      const {id, description, amount, transactionDate} = transaction;
       return (
         <StyledTableRow key={id}>
           <StyledTableCell>{description}</StyledTableCell>
