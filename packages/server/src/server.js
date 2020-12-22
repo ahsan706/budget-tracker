@@ -1,5 +1,5 @@
-import express, { json } from 'express';
-import cors from 'cors';
+const express = require('express');
+const cors = require('cors');
 
 const app = express();
 const port = 8080;
@@ -19,7 +19,7 @@ const getIdForNextTransaction = (transactions) => {
 app.use(cors());
 
 // Configuring body parser middleware
-app.use(json());
+app.use(express.json());
 
 app.post('/addTransaction', (req, res) => {
   const transaction = req.body;

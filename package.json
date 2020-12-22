@@ -1,14 +1,14 @@
 {
   "name": "budget-tracker",
   "workspaces": [
-    "client",
-    "server"
+    "./packages/client",
+    "./packages/server"
   ],
   
   "scripts": {
     "client": "cd packages/client && yarn start",
     "server": "cd packages/server && yarn start",
-    "dev": "concurrently \"yarn server\" \"yarn client\""
+    "dev": "concurrently -k \"yarn server\" \"yarn client\""
   },
   "version": "1.0.0",
   "author": "Ahsan",
