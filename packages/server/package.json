@@ -5,7 +5,8 @@
   "scripts": {
     "start": "node ./src/server.js",
     "lint": "eslint 'src/**/*.js'",
-    "lint-fix": "eslint --fix 'src/**/*.js'"
+    "lint-fix": "eslint --fix 'src/**/*.js'",
+    "format": "prettier --write 'src/**/*.js'"
   },
   "license": "MIT",
   "dependencies": {
@@ -14,6 +15,8 @@
   },
   "devDependencies": {
     "eslint": "^7.16.0",
-    "eslint-config-google": "^0.14.0"
+    "eslint-config-google": "^0.14.0",
+    "eslint-config-prettier": "^7.1.0",
+    "prettier": "^2.2.1"
   }
 }

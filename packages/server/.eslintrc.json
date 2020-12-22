@@ -4,13 +4,15 @@
         "node": true
     },
     "extends": [
-        "google"
+        "google",
+        "prettier",
+        "prettier/prettier"
     ],
     "parserOptions": {
         "ecmaVersion": 12,
         "sourceType": "module"
     },
     "rules": {
-        "max-len": ["error", { "code": 100 }]
+        "quotes": [2, "single", { "avoidEscape": true }]
     }
 }

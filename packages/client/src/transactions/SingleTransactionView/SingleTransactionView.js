@@ -7,23 +7,23 @@ import CloseIcon from '@material-ui/icons/Close';
 import InputLabel from '@material-ui/core/InputLabel';
 import FilledInput from '@material-ui/core/FilledInput';
 import Button from '@material-ui/core/Button';
-import {withStyles} from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 const styles = (theme) => ({
   root: {
-    'width': '60vw',
-    'padding': theme.spacing(2),
-    'display': 'flex',
-    'flex-direction': 'column',
+    width: '60vw',
+    padding: theme.spacing(2),
+    display: 'flex',
+    'flex-direction': 'column'
   },
   marginTop: {
-    'margin-top': theme.spacing(4),
+    'margin-top': theme.spacing(4)
   },
   topRight: {
     position: 'absolute',
     right: 0,
     top: 0,
-    color: theme.palette.grey[500],
-  },
+    color: theme.palette.grey[500]
+  }
 });
 class SingleTransactionView extends React.Component {
   constructor(props) {
@@ -33,7 +33,7 @@ class SingleTransactionView extends React.Component {
       description: '',
       amount: '',
       transactionDate: '',
-      isEditMode: false,
+      isEditMode: false
     };
   }
   componentDidUpdate(prevProps) {
@@ -44,7 +44,7 @@ class SingleTransactionView extends React.Component {
         description: '',
         amount: '',
         transactionDate: '',
-        isEditMode: false,
+        isEditMode: false
       });
     } else {
       if (
@@ -58,7 +58,7 @@ class SingleTransactionView extends React.Component {
           description: this.props.editTransaction.description,
           amount: this.props.editTransaction.amount,
           transactionDate: this.props.editTransaction.transactionDate,
-          isEditMode: true,
+          isEditMode: true
         });
       }
     }
@@ -66,17 +66,17 @@ class SingleTransactionView extends React.Component {
   myChangeHandler(event) {
     const name = event.target.name;
     const value = event.target.value;
-    this.setState({[name]: value});
-  };
+    this.setState({ [name]: value });
+  }
   getStateForServer(state) {
     const allowed = ['description', 'amount', 'transactionDate', 'id'];
 
     const filtered = Object.keys(state)
-        .filter((key) => allowed.includes(key))
-        .reduce((obj, key) => {
-          obj[key] = state[key];
-          return obj;
-        }, {});
+      .filter((key) => allowed.includes(key))
+      .reduce((obj, key) => {
+        obj[key] = state[key];
+        return obj;
+      }, {});
     return filtered;
   }
   async formSubmit(event) {
@@ -90,9 +90,9 @@ class SingleTransactionView extends React.Component {
     const response = await fetch(url, {
       method: httpMethod,
       headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json'
       },
-      body: JSON.stringify(this.getStateForServer(this.state)),
+      body: JSON.stringify(this.getStateForServer(this.state))
     });
     const transaction = await response.json();
     this.props.updatedOrCreatedTransaction(transaction);
@@ -143,9 +143,7 @@ class SingleTransactionView extends React.Component {
             onChange={this.myChangeHandler}
             defaultValue={this.getFromPropsOrDefaultValue('description')}
           />
-          <InputLabel className={this.props.classes.marginTop}>
-            Amount
-          </InputLabel>
+          <InputLabel className={this.props.classes.marginTop}>Amount</InputLabel>
           <FilledInput
             type="text"
             name="amount"
@@ -163,8 +161,11 @@ class SingleTransactionView extends React.Component {
             {this.getButtonText(this.state.isEditMode)}
           </Button>
         </form>
-        <IconButton onClick={() => this.handleClose()}className={this.props.classes.topRight}>
-          <CloseIcon/>
+        <IconButton
+          onClick={() => this.handleClose()}
+          className={this.props.classes.topRight}
+        >
+          <CloseIcon />
         </IconButton>
       </Dialog>
     );
@@ -175,6 +176,6 @@ SingleTransactionView.propTypes = {
   updatedOrCreatedTransaction: PropTypes.func,
   dialogClosed: PropTypes.func,
   open: PropTypes.bool,
-  classes: PropTypes.object.isRequired,
+  classes: PropTypes.object.isRequired
 };
 export default withStyles(styles)(SingleTransactionView);

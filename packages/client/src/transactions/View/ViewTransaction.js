@@ -11,40 +11,40 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import TableContainer from '@material-ui/core/TableContainer';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import {withStyles} from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 const StyledTableCell = withStyles((theme) => ({
   head: {
     backgroundColor: theme.palette.common.black,
-    color: theme.palette.common.white,
+    color: theme.palette.common.white
   },
   body: {
-    fontSize: 14,
-  },
+    fontSize: 14
+  }
 }))(TableCell);
 
 const StyledTableRow = withStyles((theme) => ({
   root: {
     '&:nth-of-type(even)': {
-      backgroundColor: theme.palette.action.hover,
-    },
-  },
+      backgroundColor: theme.palette.action.hover
+    }
+  }
 }))(TableRow);
 const styles = () => ({
   root: {
-    width: '100%',
-  },
+    width: '100%'
+  }
 });
 class ViewTransaction extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      transactions: [],
+      transactions: []
     };
   }
   static getDerivedStateFromProps(props, state) {
     if (props.updatedOrCreatedTransaction !== undefined) {
       const newState = {
-        transactions: [...state.transactions],
+        transactions: [...state.transactions]
       };
       newState.transactions[props.updatedOrCreatedTransaction.id] =
         props.updatedOrCreatedTransaction;
@@ -56,33 +56,33 @@ class ViewTransaction extends React.Component {
     const response = await (
       await fetch('http://localhost:8080/getAllTransaction')
     ).json();
-    this.setState({transactions: response});
+    this.setState({ transactions: response });
   }
   onEditTransaction(id) {
     this.props.editTransaction(
-        this.state.transactions.find((transaction) => transaction.id === id),
+      this.state.transactions.find((transaction) => transaction.id === id)
     );
   }
   async onDeleteTransaction(id) {
     await fetch('http://localhost:8080/deleteTransaction', {
       method: 'DELETE',
       headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json'
       },
-      body: JSON.stringify({id}),
+      body: JSON.stringify({ id })
     });
     const transactions = [...this.state.transactions];
     const indexOfTransaction = transactions.findIndex(
-        (transaction) => transaction.id === id,
+      (transaction) => transaction.id === id
     );
     transactions.splice(indexOfTransaction, 1);
-    this.setState({transactions});
+    this.setState({ transactions });
   }
   renderTableData(transactions) {
     const tableList = [];
     tableList.push();
     const tableData = transactions.map((transaction) => {
-      const {id, description, amount, transactionDate} = transaction;
+      const { id, description, amount, transactionDate } = transaction;
       return (
         <StyledTableRow key={id}>
           <StyledTableCell>{description}</StyledTableCell>
@@ -138,6 +138,6 @@ ViewTransaction.propTypes = {
   deleteTransaction: PropTypes.func,
   transactionDate: PropTypes.string,
   updatedOrCreatedTransaction: PropTypes.any,
-  classes: PropTypes.object.isRequired,
+  classes: PropTypes.object.isRequired
 };
 export default withStyles(styles)(ViewTransaction);
