@@ -5,6 +5,7 @@ import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
+import Paper from '@material-ui/core/Paper';
 const styles = (theme) => ({
   root: {
     height: '80vh',
@@ -43,12 +44,11 @@ class Transaction extends React.Component {
   render() {
     const { classes } = this.props;
     return (
-      <Grid className={classes.root}>
+      <Grid className={classes.root} component={Paper}>
         <Button
           className={classes.addButton}
           variant="contained"
-          onClick={() => this.showAddTransaction()}
-        >
+          onClick={() => this.showAddTransaction()}>
           Add Transaction
         </Button>
         <SingleTransactionView

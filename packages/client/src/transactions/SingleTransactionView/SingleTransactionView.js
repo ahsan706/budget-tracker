@@ -132,8 +132,7 @@ class SingleTransactionView extends React.Component {
         <form
           onSubmit={(e) => this.formSubmit(e)}
           method="POST"
-          className={this.props.classes.root}
-        >
+          className={this.props.classes.root}>
           <InputLabel className={this.props.classes.marginTop}>
             Description
           </InputLabel>
@@ -163,8 +162,7 @@ class SingleTransactionView extends React.Component {
         </form>
         <IconButton
           onClick={() => this.handleClose()}
-          className={this.props.classes.topRight}
-        >
+          className={this.props.classes.topRight}>
           <CloseIcon />
         </IconButton>
       </Dialog>

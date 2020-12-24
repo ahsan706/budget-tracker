@@ -117,8 +117,7 @@ class ViewTransaction extends React.Component {
     return (
       <TableContainer
         className={this.props.classes.root}
-        aria-label="customized table"
-      >
+        aria-label="customized table">
         <Table>
           <TableHead>
             <StyledTableRow key="header">
