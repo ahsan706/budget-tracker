@@ -53,14 +53,18 @@ class Transaction extends React.Component {
         </Button>
         <SingleTransactionView
           editTransaction={this.state.editTransaction}
-          updatedOrCreatedTransaction={this.updatedOrCreatedTransaction.bind(this)}
-          dialogClosed={this.dialogClosed.bind(this)}
+          updatedOrCreatedTransaction={(transaction) =>
+            this.updatedOrCreatedTransaction(transaction)
+          }
+          dialogClosed={() => this.dialogClosed()}
           open={this.state.openSingleTransactionView}
         />
         <ViewTransaction
-          editTransaction={this.editTransaction.bind(this)}
+          editTransaction={(editTransaction) =>
+            this.editTransaction(editTransaction)
+          }
           updatedOrCreatedTransaction={this.state.createdOrUpdatedTransaction}
-          dialogClosed={this.dialogClosed.bind(this)}
+          dialogClosed={() => this.dialogClosed()}
         />
       </Grid>
     );

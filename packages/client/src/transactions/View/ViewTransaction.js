@@ -44,10 +44,18 @@ class ViewTransaction extends React.Component {
   static getDerivedStateFromProps(props, state) {
     if (props.updatedOrCreatedTransaction !== undefined) {
       const newState = {
+        ...state,
         transactions: [...state.transactions]
       };
-      newState.transactions[props.updatedOrCreatedTransaction.id] =
-        props.updatedOrCreatedTransaction;
+
+      const index = newState.transactions.findIndex(
+        (transaction) => transaction.id === props.updatedOrCreatedTransaction.id
+      );
+      if (index === -1) {
+        newState.transactions.push(props.updatedOrCreatedTransaction);
+      } else {
+        newState.transactions[index] = props.updatedOrCreatedTransaction;
+      }
       return newState;
     }
     return state;
@@ -56,7 +64,7 @@ class ViewTransaction extends React.Component {
     const response = await (
       await fetch('http://localhost:8080/getAllTransaction')
     ).json();
-    this.setState({ transactions: response });
+    this.setState({ transactions: response.data });
   }
   onEditTransaction(id) {
     this.props.editTransaction(

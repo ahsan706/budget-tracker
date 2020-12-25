@@ -23,6 +23,9 @@ const styles = (theme) => ({
     right: 0,
     top: 0,
     color: theme.palette.grey[500]
+  },
+  inputMaxWidth: {
+    width: '50vw'
   }
 });
 class SingleTransactionView extends React.Component {
@@ -36,32 +39,32 @@ class SingleTransactionView extends React.Component {
       isEditMode: false
     };
   }
-  componentDidUpdate(prevProps) {
-    if (this.props.editTransaction === undefined && this.state.id !== -1) {
-      this.setState({
-        ...this.state,
+  static getDerivedStateFromProps(props, state) {
+    if (props.editTransaction === undefined && state.id === -1) {
+      return {
+        ...state,
         id: -1,
         description: '',
         amount: '',
         transactionDate: '',
         isEditMode: false
-      });
+      };
     } else {
       if (
-        (prevProps.editTransaction === undefined ||
-          this.props.editTransaction.id !== prevProps.editTransaction.id) &&
-        this.props.editTransaction !== undefined
+        props.editTransaction !== undefined &&
+        props.editTransaction.id !== state.id
       ) {
-        this.setState({
-          ...this.state,
-          id: this.props.editTransaction.id,
-          description: this.props.editTransaction.description,
-          amount: this.props.editTransaction.amount,
-          transactionDate: this.props.editTransaction.transactionDate,
+        return {
+          ...state,
+          id: props.editTransaction.id,
+          description: props.editTransaction.description,
+          amount: props.editTransaction.amount,
+          transactionDate: props.editTransaction.transactionDate,
           isEditMode: true
-        });
+        };
       }
     }
+    return state;
   }
   myChangeHandler(event) {
     const name = event.target.name;
@@ -94,7 +97,7 @@ class SingleTransactionView extends React.Component {
       },
       body: JSON.stringify(this.getStateForServer(this.state))
     });
-    const transaction = await response.json();
+    const transaction = (await response.json()).data;
     this.props.updatedOrCreatedTransaction(transaction);
     this.handleClose();
   }
@@ -139,24 +142,29 @@ class SingleTransactionView extends React.Component {
           <FilledInput
             type="text"
             name="description"
-            onChange={this.myChangeHandler}
+            onChange={(event) => this.myChangeHandler(event)}
+            className={this.props.classes.inputMaxWidth}
             defaultValue={this.getFromPropsOrDefaultValue('description')}
           />
           <InputLabel className={this.props.classes.marginTop}>Amount</InputLabel>
           <FilledInput
-            type="text"
+            type="number"
             name="amount"
-            onChange={this.myChangeHandler}
+            onChange={(event) => this.myChangeHandler(event)}
+            className={this.props.classes.inputMaxWidth}
             defaultValue={this.getFromPropsOrDefaultValue('amount')}
           />
           <InputLabel className={this.props.classes.marginTop}>Date</InputLabel>
           <FilledInput
             type="date"
             name="transactionDate"
-            onChange={this.myChangeHandler}
+            onChange={(event) => this.myChangeHandler(event)}
+            className={this.props.classes.inputMaxWidth}
             defaultValue={this.getFromPropsOrDefaultValue('transactionDate')}
           />
-          <Button variant="contained" className={this.props.classes.marginTop}>
+          <Button
+            variant="contained"
+            className={`${this.props.classes.marginTop} ${this.props.classes.inputMaxWidth}`}>
             {this.getButtonText(this.state.isEditMode)}
           </Button>
         </form>
