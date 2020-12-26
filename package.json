@@ -21,9 +21,12 @@
     }
   },
   "lint-staged": {
-    "*.js": [
+    "*.{js}": [
       "prettier --write",
       "eslint --fix"
+    ],
+    "*.{html,json}": [
+      "prettier --write"
     ]
   },
   "devDependencies": {
