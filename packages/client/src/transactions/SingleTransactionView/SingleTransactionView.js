@@ -8,24 +8,20 @@ import InputLabel from '@material-ui/core/InputLabel';
 import FilledInput from '@material-ui/core/FilledInput';
 import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
+
 const styles = (theme) => ({
   root: {
-    width: '60vw',
+    width: '40vw',
     padding: theme.spacing(2),
     display: 'flex',
+    gap: theme.spacing(2),
     'flex-direction': 'column'
-  },
-  marginTop: {
-    'margin-top': theme.spacing(4)
   },
   topRight: {
     position: 'absolute',
     right: 0,
     top: 0,
     color: theme.palette.grey[500]
-  },
-  inputMaxWidth: {
-    width: '50vw'
   }
 });
 class SingleTransactionView extends React.Component {
@@ -102,6 +98,14 @@ class SingleTransactionView extends React.Component {
     this.handleClose();
   }
   handleClose() {
+    this.setState({
+      ...this.state,
+      id: -1,
+      description: '',
+      amount: '',
+      transactionDate: '',
+      isEditMode: false
+    });
     this.props.dialogClosed();
   }
   getTileText(isEditMode) {
@@ -127,7 +131,10 @@ class SingleTransactionView extends React.Component {
   }
   render() {
     return (
-      <Dialog onClose={() => this.handleClose()} open={this.props.open}>
+      <Dialog
+        onClose={() => this.handleClose()}
+        open={this.props.open}
+        maxWidth={false}>
         <DialogTitle id="simple-dialog-title">
           {this.getTileText(this.state.isEditMode)}
         </DialogTitle>
@@ -136,35 +143,29 @@ class SingleTransactionView extends React.Component {
           onSubmit={(e) => this.formSubmit(e)}
           method="POST"
           className={this.props.classes.root}>
-          <InputLabel className={this.props.classes.marginTop}>
-            Description
-          </InputLabel>
+          <InputLabel>Description</InputLabel>
           <FilledInput
             type="text"
             name="description"
             onChange={(event) => this.myChangeHandler(event)}
-            className={this.props.classes.inputMaxWidth}
+            fullWidth={true}
             defaultValue={this.getFromPropsOrDefaultValue('description')}
           />
-          <InputLabel className={this.props.classes.marginTop}>Amount</InputLabel>
+          <InputLabel>Amount</InputLabel>
           <FilledInput
             type="number"
             name="amount"
             onChange={(event) => this.myChangeHandler(event)}
-            className={this.props.classes.inputMaxWidth}
             defaultValue={this.getFromPropsOrDefaultValue('amount')}
           />
-          <InputLabel className={this.props.classes.marginTop}>Date</InputLabel>
+          <InputLabel>Date</InputLabel>
           <FilledInput
             type="date"
             name="transactionDate"
             onChange={(event) => this.myChangeHandler(event)}
-            className={this.props.classes.inputMaxWidth}
             defaultValue={this.getFromPropsOrDefaultValue('transactionDate')}
           />
-          <Button
-            variant="contained"
-            className={`${this.props.classes.marginTop} ${this.props.classes.inputMaxWidth}`}>
+          <Button variant="contained">
             {this.getButtonText(this.state.isEditMode)}
           </Button>
         </form>
