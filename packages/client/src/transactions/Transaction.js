@@ -36,7 +36,10 @@ class Transaction extends React.Component {
     });
   }
   dialogClosed() {
-    this.setState({ editTransaction: undefined, openSingleTransactionView: false });
+    this.setState({
+      editTransaction: undefined,
+      openSingleTransactionView: false
+    });
   }
   updatedOrCreatedTransaction(transaction) {
     this.setState({ createdOrUpdatedTransaction: transaction });

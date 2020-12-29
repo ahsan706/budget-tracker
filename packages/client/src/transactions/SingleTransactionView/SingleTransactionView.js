@@ -36,29 +36,18 @@ class SingleTransactionView extends React.Component {
     };
   }
   static getDerivedStateFromProps(props, state) {
-    if (props.editTransaction === undefined && state.id === -1) {
+    if (
+      props.editTransaction !== undefined &&
+      props.editTransaction.id !== state.id
+    ) {
       return {
         ...state,
-        id: -1,
-        description: '',
-        amount: '',
-        transactionDate: '',
-        isEditMode: false
+        id: props.editTransaction.id,
+        description: props.editTransaction.description,
+        amount: props.editTransaction.amount,
+        transactionDate: props.editTransaction.transactionDate,
+        isEditMode: true
       };
-    } else {
-      if (
-        props.editTransaction !== undefined &&
-        props.editTransaction.id !== state.id
-      ) {
-        return {
-          ...state,
-          id: props.editTransaction.id,
-          description: props.editTransaction.description,
-          amount: props.editTransaction.amount,
-          transactionDate: props.editTransaction.transactionDate,
-          isEditMode: true
-        };
-      }
     }
     return state;
   }
@@ -99,7 +88,6 @@ class SingleTransactionView extends React.Component {
   }
   handleClose() {
     this.setState({
-      ...this.state,
       id: -1,
       description: '',
       amount: '',
