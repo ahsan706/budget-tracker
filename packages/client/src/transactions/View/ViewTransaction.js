@@ -101,7 +101,9 @@ class ViewTransaction extends React.Component {
           <StyledTableCell>
             <Grid container>
               <Grid item xs={9}>
-                <Typography>{transactionDate}</Typography>
+                <Typography>
+                  {new Date(transactionDate).toLocaleDateString()}
+                </Typography>
               </Grid>
               <Grid item xs={3}>
                 <Grid container>
@@ -146,7 +148,6 @@ class ViewTransaction extends React.Component {
 ViewTransaction.propTypes = {
   editTransaction: PropTypes.func,
   deleteTransaction: PropTypes.func,
-  transactionDate: PropTypes.string,
   updatedOrCreatedTransaction: PropTypes.any,
   classes: PropTypes.object.isRequired
 };
