@@ -10,8 +10,7 @@ import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
 
 const styles = (theme) => ({
-  root: {
-    width: '40vw',
+  form: {
     padding: theme.spacing(2),
     display: 'flex',
     gap: theme.spacing(2),
@@ -122,6 +121,7 @@ class SingleTransactionView extends React.Component {
       <Dialog
         onClose={() => this.handleClose()}
         open={this.props.open}
+        fullWidth={true}
         maxWidth={false}>
         <DialogTitle id="simple-dialog-title">
           {this.getTileText(this.state.isEditMode)}
@@ -130,7 +130,7 @@ class SingleTransactionView extends React.Component {
         <form
           onSubmit={(e) => this.formSubmit(e)}
           method="POST"
-          className={this.props.classes.root}>
+          className={this.props.classes.form}>
           <InputLabel>Description</InputLabel>
           <FilledInput
             type="text"
