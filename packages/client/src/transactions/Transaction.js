@@ -6,10 +6,6 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 const styles = (theme) => ({
-  // root: {
-  //   // height: '85vh',
-  //   // padding: '5%'
-  // },
   addButton: {
     margin: theme.spacing(2)
   }
