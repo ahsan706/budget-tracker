@@ -2,17 +2,16 @@ import React from 'react';
 import SingleTransactionView from './SingleTransactionView/SingleTransactionView';
 import ViewTransaction from './View/ViewTransaction';
 import Button from '@material-ui/core/Button';
-import Grid from '@material-ui/core/Grid';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 const styles = (theme) => ({
-  root: {
-    height: '80vh',
-    padding: '5%'
-  },
+  // root: {
+  //   // height: '85vh',
+  //   // padding: '5%'
+  // },
   addButton: {
-    'margin-bottom': theme.spacing(2)
+    margin: theme.spacing(2)
   }
 });
 class Transaction extends React.Component {
@@ -47,7 +46,7 @@ class Transaction extends React.Component {
   render() {
     const { classes } = this.props;
     return (
-      <Grid className={classes.root} component={Paper}>
+      <Paper>
         <Button
           className={classes.addButton}
           variant="contained"
@@ -69,7 +68,7 @@ class Transaction extends React.Component {
           updatedOrCreatedTransaction={this.state.createdOrUpdatedTransaction}
           dialogClosed={() => this.dialogClosed()}
         />
-      </Grid>
+      </Paper>
     );
   }
 }

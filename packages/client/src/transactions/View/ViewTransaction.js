@@ -29,9 +29,12 @@ const StyledTableRow = withStyles((theme) => ({
     }
   }
 }))(TableRow);
-const styles = () => ({
+const styles = (theme) => ({
   root: {
-    width: '100%'
+    width: '100%',
+    height: '74vh',
+    overflow: 'auto',
+    padding: `0 ${theme.spacing(1)} 0 ${theme.spacing(1)}`
   }
 });
 class ViewTransaction extends React.Component {
@@ -126,7 +129,7 @@ class ViewTransaction extends React.Component {
       <TableContainer
         className={this.props.classes.root}
         aria-label="customized table">
-        <Table>
+        <Table stickyHeader>
           <TableHead>
             <StyledTableRow key="header">
               <StyledTableCell>Description</StyledTableCell>
