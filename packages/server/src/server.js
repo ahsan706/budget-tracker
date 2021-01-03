@@ -10,8 +10,8 @@ app.use(cors());
 // Configuring body parser middleware
 app.use(express.json());
 let dbPath = 'mongodb://localhost/budget-tracker';
-if (process.env.URL && process.env.PASSWORD && process.env.DB_NAME) {
-  dbPath = `mongodb+srv://${process.env.URL}:${process.env.PASSWORD}@cluster0.idfhi.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`;
+if (process.env.DB_URL && process.env.DB_PASSWORD && process.env.DB_NAME) {
+  dbPath = `mongodb+srv://${process.env.DB_URL}:${process.env.DB_PASSWORD}@cluster0.idfhi.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`;
 }
 const options = { useNewUrlParser: true, useUnifiedTopology: true };
 const mongo = mongoose.connect(dbPath, options);

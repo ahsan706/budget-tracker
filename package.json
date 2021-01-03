@@ -10,7 +10,7 @@
   ],
   "scripts": {
     "client": "cd packages/client && yarn start",
-    "server": "cd packages/server && yarn start",
+    "server": "cd packages/server && yarn dev",
     "postinstall": "node node_modules/husky/husky.js install",
     "dev": "concurrently -k \"yarn server\" \"yarn client\""
   },
