@@ -8,7 +8,6 @@ import Typography from '@material-ui/core/Typography';
 import AttachMoney from '@material-ui/icons/AttachMoney';
 import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
-
 const styles = () => ({});
 function Copyright() {
   return (

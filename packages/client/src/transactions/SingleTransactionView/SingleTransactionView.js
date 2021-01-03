@@ -8,7 +8,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import FilledInput from '@material-ui/core/FilledInput';
 import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
-
+import BASE_URL from '../../config/constants';
 const styles = (theme) => ({
   form: {
     padding: theme.spacing(2),
@@ -68,10 +68,10 @@ class SingleTransactionView extends React.Component {
   }
   async formSubmit(event) {
     event.preventDefault();
-    let url = 'http://localhost:8080/addTransaction';
+    let url = `${BASE_URL}addTransaction`;
     let httpMethod = 'POST';
     if (this.state.isEditMode) {
-      url = 'http://localhost:8080/editTransaction';
+      url = `${BASE_URL}editTransaction`;
       httpMethod = 'PUT';
     }
     const response = await fetch(url, {

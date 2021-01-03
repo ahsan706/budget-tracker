@@ -2,14 +2,17 @@ const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const app = express();
-const port = 8080;
+const port = process.env.PORT || 8080;
 const apiRoutes = require('./routes/transactionRoutes');
 
 app.use(cors());
 
 // Configuring body parser middleware
 app.use(express.json());
-const dbPath = 'mongodb://localhost/budget-tracker';
+let dbPath = 'mongodb://localhost/budget-tracker';
+if (process.env.URL && process.env.PASSWORD && process.env.DB_NAME) {
+  dbPath = `mongodb+srv://${process.env.URL}:${process.env.PASSWORD}@cluster0.idfhi.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`;
+}
 const options = { useNewUrlParser: true, useUnifiedTopology: true };
 const mongo = mongoose.connect(dbPath, options);
 mongo.then(

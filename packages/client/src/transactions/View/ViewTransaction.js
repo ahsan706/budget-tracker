@@ -12,6 +12,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
+import BASE_URL from '../../config/constants';
 const StyledTableCell = withStyles((theme) => ({
   head: {
     backgroundColor: theme.palette.common.black,
@@ -64,9 +65,7 @@ class ViewTransaction extends React.Component {
     return state;
   }
   async componentDidMount() {
-    const response = await (
-      await fetch('http://localhost:8080/getAllTransaction')
-    ).json();
+    const response = await (await fetch(`${BASE_URL}getAllTransaction`)).json();
     this.setState({ transactions: response.data });
   }
   onEditTransaction(id) {
@@ -75,7 +74,7 @@ class ViewTransaction extends React.Component {
     );
   }
   async onDeleteTransaction(id) {
-    await fetch('http://localhost:8080/deleteTransaction', {
+    await fetch(`${BASE_URL}/deleteTransaction`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json'
