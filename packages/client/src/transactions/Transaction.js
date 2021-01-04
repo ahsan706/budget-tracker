@@ -10,64 +10,57 @@ const styles = (theme) => ({
     margin: theme.spacing(2)
   }
 });
-class Transaction extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      editTransaction: undefined,
-      createdOrUpdatedTransaction: undefined,
-      openSingleTransactionView: false
-    };
-  }
-  showAddTransaction() {
-    this.setState({
-      openSingleTransactionView: true
-    });
-  }
-  editTransaction(editTransaction) {
-    this.setState({
-      editTransaction: editTransaction,
-      openSingleTransactionView: true
-    });
-  }
-  dialogClosed() {
-    this.setState({
-      editTransaction: undefined,
-      openSingleTransactionView: false
-    });
-  }
-  updatedOrCreatedTransaction(transaction) {
-    this.setState({ createdOrUpdatedTransaction: transaction });
-  }
-  render() {
-    const { classes } = this.props;
-    return (
-      <Paper>
-        <Button
-          className={classes.addButton}
-          variant="contained"
-          onClick={() => this.showAddTransaction()}>
-          Add Transaction
-        </Button>
-        <SingleTransactionView
-          editTransaction={this.state.editTransaction}
-          updatedOrCreatedTransaction={(transaction) =>
-            this.updatedOrCreatedTransaction(transaction)
-          }
-          dialogClosed={() => this.dialogClosed()}
-          open={this.state.openSingleTransactionView}
-        />
-        <ViewTransaction
-          editTransaction={(editTransaction) =>
-            this.editTransaction(editTransaction)
-          }
-          updatedOrCreatedTransaction={this.state.createdOrUpdatedTransaction}
-          dialogClosed={() => this.dialogClosed()}
-        />
-      </Paper>
-    );
-  }
-}
+
+const Transaction = (props) => {
+  const [transactionToBeEdited, setTransactionToBeEdited] = React.useState(
+    undefined
+  );
+  const [
+    createdOrUpdatedTransaction,
+    setCreatedOrUpdatedTransaction
+  ] = React.useState(undefined);
+  const [openSingleTransactionView, setOpenSingleTransactionView] = React.useState(
+    false
+  );
+  const showAddTransaction = () => {
+    setOpenSingleTransactionView(true);
+  };
+  const editTransaction = (transaction) => {
+    setTransactionToBeEdited(transaction);
+    setOpenSingleTransactionView(true);
+  };
+  const dialogClosed = () => {
+    setTransactionToBeEdited(undefined);
+    setOpenSingleTransactionView(false);
+  };
+  const updatedOrCreatedTransaction = (transaction) => {
+    setCreatedOrUpdatedTransaction(transaction);
+  };
+  const { classes } = props;
+  return (
+    <Paper>
+      <Button
+        className={classes.addButton}
+        variant="contained"
+        onClick={() => showAddTransaction()}>
+        Add Transaction
+      </Button>
+      <SingleTransactionView
+        editTransaction={transactionToBeEdited}
+        updatedOrCreatedTransaction={(transaction) =>
+          updatedOrCreatedTransaction(transaction)
+        }
+        dialogClosed={() => dialogClosed()}
+        open={openSingleTransactionView}
+      />
+      <ViewTransaction
+        editTransaction={(transaction) => editTransaction(transaction)}
+        updatedOrCreatedTransaction={createdOrUpdatedTransaction}
+        dialogClosed={() => dialogClosed()}
+      />
+    </Paper>
+  );
+};
 Transaction.propTypes = {
   classes: PropTypes.object.isRequired
 };

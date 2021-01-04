@@ -38,60 +38,49 @@ const styles = (theme) => ({
     padding: `0 ${theme.spacing(1)} 0 ${theme.spacing(1)}`
   }
 });
-class ViewTransaction extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      transactions: []
-    };
-  }
-  static getDerivedStateFromProps(props, state) {
+const ViewTransaction = (props) => {
+  const [transactions, setTransactions] = React.useState([]);
+  React.useEffect(() => {
     if (props.updatedOrCreatedTransaction !== undefined) {
-      const newState = {
-        ...state,
-        transactions: [...state.transactions]
-      };
+      const transactionsCopy = [...transactions];
 
-      const index = newState.transactions.findIndex(
+      const index = transactionsCopy.findIndex(
         (transaction) => transaction.id === props.updatedOrCreatedTransaction.id
       );
       if (index === -1) {
-        newState.transactions.push(props.updatedOrCreatedTransaction);
+        transactionsCopy.push(props.updatedOrCreatedTransaction);
       } else {
-        newState.transactions[index] = props.updatedOrCreatedTransaction;
+        transactionsCopy[index] = props.updatedOrCreatedTransaction;
       }
-      return newState;
+      setTransactions(transactionsCopy);
     }
-    return state;
-  }
-  async componentDidMount() {
+  }, [props.updatedOrCreatedTransaction]);
+  React.useEffect(async () => {
     const response = await (await fetch(`${BASE_URL}getAllTransaction`)).json();
-    this.setState({ transactions: response.data });
-  }
-  onEditTransaction(id) {
-    this.props.editTransaction(
-      this.state.transactions.find((transaction) => transaction.id === id)
-    );
-  }
-  async onDeleteTransaction(id) {
-    await fetch(`${BASE_URL}/deleteTransaction`, {
+    setTransactions(response.data);
+  }, []);
+  const onEditTransaction = (id) => {
+    props.editTransaction(transactions.find((transaction) => transaction.id === id));
+  };
+  const onDeleteTransaction = async (id) => {
+    await fetch(`${BASE_URL}deleteTransaction`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({ id })
     });
-    const transactions = [...this.state.transactions];
-    const indexOfTransaction = transactions.findIndex(
+    const transactionsCopy = [...transactions];
+    const indexOfTransaction = transactionsCopy.findIndex(
       (transaction) => transaction.id === id
     );
-    transactions.splice(indexOfTransaction, 1);
-    this.setState({ transactions });
-  }
-  renderTableData(transactions) {
+    transactionsCopy.splice(indexOfTransaction, 1);
+    setTransactions(transactionsCopy);
+  };
+  const renderTableData = (transactionsToRender) => {
     const tableList = [];
     tableList.push();
-    const tableData = transactions.map((transaction) => {
+    const tableData = transactionsToRender.map((transaction) => {
       const { id, description, amount, transactionDate } = transaction;
       return (
         <StyledTableRow key={id}>
@@ -107,12 +96,12 @@ class ViewTransaction extends React.Component {
               <Grid item xs={3}>
                 <Grid container>
                   <Grid item xs={5}>
-                    <IconButton onClick={() => this.onEditTransaction(id)}>
+                    <IconButton onClick={() => onEditTransaction(id)}>
                       <EditIcon />
                     </IconButton>
                   </Grid>
                   <Grid item xs={5}>
-                    <IconButton onClick={() => this.onDeleteTransaction(id)}>
+                    <IconButton onClick={() => onDeleteTransaction(id)}>
                       <DeleteIcon />
                     </IconButton>
                   </Grid>
@@ -124,29 +113,24 @@ class ViewTransaction extends React.Component {
       );
     });
     return tableList.concat(tableData);
-  }
-  render() {
-    return (
-      <TableContainer
-        className={this.props.classes.root}
-        aria-label="customized table">
-        <Table stickyHeader>
-          <TableHead>
-            <StyledTableRow key="header">
-              <StyledTableCell>Description</StyledTableCell>
-              <StyledTableCell>Amount</StyledTableCell>
-              <StyledTableCell>Transaction Date</StyledTableCell>
-            </StyledTableRow>
-          </TableHead>
-          <TableBody>{this.renderTableData(this.state.transactions)}</TableBody>
-        </Table>
-      </TableContainer>
-    );
-  }
-}
+  };
+  return (
+    <TableContainer className={props.classes.root} aria-label="customized table">
+      <Table stickyHeader>
+        <TableHead>
+          <StyledTableRow key="header">
+            <StyledTableCell>Description</StyledTableCell>
+            <StyledTableCell>Amount</StyledTableCell>
+            <StyledTableCell>Transaction Date</StyledTableCell>
+          </StyledTableRow>
+        </TableHead>
+        <TableBody>{renderTableData(transactions)}</TableBody>
+      </Table>
+    </TableContainer>
+  );
+};
 ViewTransaction.propTypes = {
   editTransaction: PropTypes.func,
-  deleteTransaction: PropTypes.func,
   updatedOrCreatedTransaction: PropTypes.any,
   classes: PropTypes.object.isRequired
 };

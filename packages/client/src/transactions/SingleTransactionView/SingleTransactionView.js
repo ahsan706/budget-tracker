@@ -23,54 +23,52 @@ const styles = (theme) => ({
     color: theme.palette.grey[500]
   }
 });
-class SingleTransactionView extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      id: -1,
-      description: '',
-      amount: '',
-      transactionDate: '',
-      isEditMode: false
-    };
-  }
-  static getDerivedStateFromProps(props, state) {
+const SingleTransactionView = (props) => {
+  const [state, setState] = React.useState({
+    id: -1,
+    description: '',
+    amount: '',
+    transactionDate: '',
+    isEditMode: false
+  });
+  React.useEffect(() => {
     if (
       props.editTransaction !== undefined &&
       props.editTransaction.id !== state.id
     ) {
-      return {
-        ...state,
+      setState({
         id: props.editTransaction.id,
         description: props.editTransaction.description,
         amount: props.editTransaction.amount,
         transactionDate: props.editTransaction.transactionDate,
         isEditMode: true
-      };
+      });
     }
-    return state;
-  }
-  myChangeHandler(event) {
+  }, [props.editTransaction]);
+  const myChangeHandler = (event) => {
     const name = event.target.name;
     const value = event.target.value;
-    this.setState({ [name]: value });
-  }
-  getStateForServer(state) {
+    setState({
+      ...state,
+      [name]: value
+    });
+  };
+  const getStateForServer = (originalState) => {
     const allowed = ['description', 'amount', 'transactionDate', 'id'];
 
     const filtered = Object.keys(state)
       .filter((key) => allowed.includes(key))
       .reduce((obj, key) => {
-        obj[key] = state[key];
+        obj[key] = originalState[key];
         return obj;
       }, {});
     return filtered;
-  }
-  async formSubmit(event) {
+  };
+  const formSubmit = async (event) => {
     event.preventDefault();
     let url = `${BASE_URL}addTransaction`;
     let httpMethod = 'POST';
-    if (this.state.isEditMode) {
+    if (state.isEditMode) {
       url = `${BASE_URL}editTransaction`;
       httpMethod = 'PUT';
     }
@@ -79,93 +77,93 @@ class SingleTransactionView extends React.Component {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(this.getStateForServer(this.state))
+      body: JSON.stringify(getStateForServer(state))
     });
     const transaction = (await response.json()).data;
-    this.props.updatedOrCreatedTransaction(transaction);
-    this.handleClose();
-  }
-  handleClose() {
-    this.setState({
+    props.updatedOrCreatedTransaction(transaction);
+    handleClose();
+  };
+  const handleClose = () => {
+    setState({
       id: -1,
       description: '',
       amount: '',
       transactionDate: '',
       isEditMode: false
     });
-    this.props.dialogClosed();
-  }
-  getTileText(isEditMode) {
+    props.dialogClosed();
+  };
+  const getTileText = (isEditMode) => {
     if (isEditMode) {
       return 'Edit Transaction';
     } else {
       return 'Add Transaction';
     }
-  }
-  getButtonText(isEditMode) {
+  };
+  const getButtonText = (isEditMode) => {
     if (isEditMode) {
       return 'Edit';
     } else {
       return 'Add';
     }
-  }
-  getFromPropsOrDefaultValue(key) {
-    let val = this.state[key];
-    if (this.props.editTransaction) {
-      val = this.props.editTransaction[key];
+  };
+  const getFromPropsOrDefaultValue = (key) => {
+    let val = state[key];
+    if (props.editTransaction) {
+      val = props.editTransaction[key];
     }
     return val;
-  }
-  render() {
-    return (
-      <Dialog
-        onClose={() => this.handleClose()}
-        open={this.props.open}
-        fullWidth={true}
-        maxWidth={false}>
-        <DialogTitle id="simple-dialog-title">
-          {this.getTileText(this.state.isEditMode)}
-        </DialogTitle>
+  };
+  return (
+    <Dialog
+      onClose={() => handleClose()}
+      open={props.open}
+      fullWidth={true}
+      maxWidth={false}>
+      <DialogTitle id="simple-dialog-title">
+        {getTileText(state.isEditMode)}
+      </DialogTitle>
 
-        <form
-          onSubmit={(e) => this.formSubmit(e)}
-          method="POST"
-          className={this.props.classes.form}>
-          <InputLabel>Description</InputLabel>
-          <FilledInput
-            type="text"
-            name="description"
-            onChange={(event) => this.myChangeHandler(event)}
-            fullWidth={true}
-            defaultValue={this.getFromPropsOrDefaultValue('description')}
-          />
-          <InputLabel>Amount</InputLabel>
-          <FilledInput
-            type="number"
-            name="amount"
-            onChange={(event) => this.myChangeHandler(event)}
-            defaultValue={this.getFromPropsOrDefaultValue('amount')}
-          />
-          <InputLabel>Date</InputLabel>
-          <FilledInput
-            type="date"
-            name="transactionDate"
-            onChange={(event) => this.myChangeHandler(event)}
-            defaultValue={this.getFromPropsOrDefaultValue('transactionDate')}
-          />
-          <Button variant="contained">
-            {this.getButtonText(this.state.isEditMode)}
-          </Button>
-        </form>
-        <IconButton
-          onClick={() => this.handleClose()}
-          className={this.props.classes.topRight}>
-          <CloseIcon />
-        </IconButton>
-      </Dialog>
-    );
-  }
-}
+      <form
+        onSubmit={(e) => formSubmit(e)}
+        method="POST"
+        className={props.classes.form}>
+        <InputLabel>Description</InputLabel>
+        <FilledInput
+          type="text"
+          name="description"
+          onChange={(event) => myChangeHandler(event)}
+          fullWidth={true}
+          defaultValue={getFromPropsOrDefaultValue('description')}
+        />
+        <InputLabel>Amount</InputLabel>
+        <FilledInput
+          type="number"
+          name="amount"
+          onChange={(event) => myChangeHandler(event)}
+          defaultValue={getFromPropsOrDefaultValue('amount')}
+        />
+        <InputLabel>Date</InputLabel>
+        <FilledInput
+          type="date"
+          name="transactionDate"
+          onChange={(event) => myChangeHandler(event)}
+          defaultValue={
+            getFromPropsOrDefaultValue('transactionDate') === ''
+              ? ''
+              : new Date(getFromPropsOrDefaultValue('transactionDate'))
+                  .toISOString()
+                  .split('T')[0]
+          }
+        />
+        <Button variant="contained">{getButtonText(state.isEditMode)}</Button>
+      </form>
+      <IconButton onClick={() => handleClose()} className={props.classes.topRight}>
+        <CloseIcon />
+      </IconButton>
+    </Dialog>
+  );
+};
 SingleTransactionView.propTypes = {
   editTransaction: PropTypes.any,
   updatedOrCreatedTransaction: PropTypes.func,

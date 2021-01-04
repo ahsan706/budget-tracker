@@ -6,9 +6,6 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Link from '@material-ui/core/Link';
 import Typography from '@material-ui/core/Typography';
 import AttachMoney from '@material-ui/icons/AttachMoney';
-import { withStyles } from '@material-ui/core/styles';
-import PropTypes from 'prop-types';
-const styles = () => ({});
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
@@ -21,33 +18,27 @@ function Copyright() {
     </Typography>
   );
 }
-class App extends React.Component {
-  render() {
-    const { classes } = this.props;
-    return (
-      <CssBaseline>
-        <AppBar position="relative">
-          <Toolbar>
-            <AttachMoney />
-            <Typography variant="h6" color="inherit" noWrap>
-              Budget Tracker
-            </Typography>
-          </Toolbar>
-        </AppBar>
-        <main>
-          <Transaction />
-        </main>
-        <footer className={classes.footer}>
-          <Typography variant="h6" align="center" gutterBottom>
-            Footer
+const App = () => {
+  return (
+    <CssBaseline>
+      <AppBar position="relative">
+        <Toolbar>
+          <AttachMoney />
+          <Typography variant="h6" color="inherit" noWrap>
+            Budget Tracker
           </Typography>
-          <Copyright />
-        </footer>
-      </CssBaseline>
-    );
-  }
-}
-App.propTypes = {
-  classes: PropTypes.object.isRequired
+        </Toolbar>
+      </AppBar>
+      <main>
+        <Transaction />
+      </main>
+      <footer>
+        <Typography variant="h6" align="center" gutterBottom>
+          Footer
+        </Typography>
+        <Copyright />
+      </footer>
+    </CssBaseline>
+  );
 };
-export default withStyles(styles)(App);
+export default App;
