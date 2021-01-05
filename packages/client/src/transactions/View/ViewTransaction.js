@@ -12,7 +12,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
-import BASE_URL from '../../config/constants';
+import axiosInstance from '../../axios/axios';
 const StyledTableCell = withStyles((theme) => ({
   head: {
     backgroundColor: theme.palette.common.black,
@@ -56,20 +56,14 @@ const ViewTransaction = (props) => {
     }
   }, [props.updatedOrCreatedTransaction]);
   React.useEffect(async () => {
-    const response = await (await fetch(`${BASE_URL}getAllTransaction`)).json();
-    setTransactions(response.data);
+    const response = await axiosInstance.get('getAllTransaction');
+    setTransactions(response.data.data);
   }, []);
   const onEditTransaction = (id) => {
     props.editTransaction(transactions.find((transaction) => transaction.id === id));
   };
   const onDeleteTransaction = async (id) => {
-    await fetch(`${BASE_URL}deleteTransaction`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ id })
-    });
+    await axiosInstance.delete('deleteTransaction', { id });
     const transactionsCopy = [...transactions];
     const indexOfTransaction = transactionsCopy.findIndex(
       (transaction) => transaction.id === id

@@ -8,7 +8,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import FilledInput from '@material-ui/core/FilledInput';
 import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
-import BASE_URL from '../../config/constants';
+import axiosInstance from '../../axios/axios';
 const styles = (theme) => ({
   form: {
     padding: theme.spacing(2),
@@ -66,20 +66,19 @@ const SingleTransactionView = (props) => {
   };
   const formSubmit = async (event) => {
     event.preventDefault();
-    let url = `${BASE_URL}addTransaction`;
-    let httpMethod = 'POST';
+    let response = {};
     if (state.isEditMode) {
-      url = `${BASE_URL}editTransaction`;
-      httpMethod = 'PUT';
+      response = await axiosInstance.put(
+        'editTransaction',
+        getStateForServer(state)
+      );
+    } else {
+      response = await axiosInstance.post(
+        'addTransaction',
+        getStateForServer(state)
+      );
     }
-    const response = await fetch(url, {
-      method: httpMethod,
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(getStateForServer(state))
-    });
-    const transaction = (await response.json()).data;
+    const transaction = response.data.data;
     props.updatedOrCreatedTransaction(transaction);
     handleClose();
   };
