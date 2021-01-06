@@ -10,6 +10,7 @@ import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import axiosInstance from '../../axios/axios';
+import { isNotEmpty, isNumber, isValidDate } from '../../utils/regexForValidation';
 const styles = (theme) => ({
   form: {
     padding: theme.spacing(2),
@@ -33,6 +34,16 @@ const SingleTransactionView = (props) => {
     isEditMode: false,
     isLoading: false
   });
+  const [touched, setTouched] = React.useState({
+    description: false,
+    amount: false,
+    transactionDate: false
+  });
+  const [valid, setValid] = React.useState({
+    description: false,
+    amount: false,
+    transactionDate: false
+  });
   React.useEffect(() => {
     if (
       props.editTransaction !== undefined &&
@@ -45,8 +56,33 @@ const SingleTransactionView = (props) => {
         transactionDate: props.editTransaction.transactionDate,
         isEditMode: true
       });
+      checkValidationForAll();
     }
   }, [props.editTransaction]);
+  const checkValidationForAll = () => {
+    for (const [key, value] of Object.entries(object1)) {
+      checkValidation(key, value);
+    }
+  };
+  const checkValidation = (name, value) => {
+    const copyValid = {
+      ...valid
+    };
+
+    switch (name) {
+      case 'description':
+        copyValid[name] = isNotEmpty.test(value);
+        break;
+      case 'amount':
+        copyValid[name] = isNumber.test(value);
+        break;
+      case 'transactionDate':
+        copyValid[name] = isValidDate.test(value);
+        console.error(copyValid[name]);
+        break;
+    }
+    setValid(copyValid);
+  };
   const myChangeHandler = (event) => {
     const name = event.target.name;
     const value = event.target.value;
@@ -54,6 +90,8 @@ const SingleTransactionView = (props) => {
       ...state,
       [name]: value
     });
+    checkValidation(name, value);
+    setTouched({ ...touched, [name]: true });
   };
   const getStateForServer = (originalState) => {
     const allowed = ['description', 'amount', 'transactionDate', 'id'];
@@ -101,6 +139,12 @@ const SingleTransactionView = (props) => {
       isEditMode: false,
       isLoading: false
     });
+    setTouched({ description: false, amount: false, transactionDate: false });
+    setValid({
+      description: false,
+      amount: false,
+      transactionDate: false
+    });
     props.dialogClosed();
   };
   const getTileText = (isEditMode) => {
@@ -124,6 +168,13 @@ const SingleTransactionView = (props) => {
     }
     return val;
   };
+  const enableButton = () => {
+    return !(
+      Object.values(touched).some((obj) => obj === true) &&
+      Object.values(valid).every((obj) => obj === true) &&
+      !state.isLoading
+    );
+  };
   return (
     <Dialog
       onClose={() => handleClose()}
@@ -143,13 +194,14 @@ const SingleTransactionView = (props) => {
           type="text"
           name="description"
           onChange={(event) => myChangeHandler(event)}
-          fullWidth={true}
+          error={touched.description && !valid.description}
           defaultValue={getFromPropsOrDefaultValue('description')}
         />
         <InputLabel>Amount</InputLabel>
         <FilledInput
           type="number"
           name="amount"
+          error={touched.amount && !valid.amount}
           onChange={(event) => myChangeHandler(event)}
           defaultValue={getFromPropsOrDefaultValue('amount')}
         />
@@ -157,6 +209,7 @@ const SingleTransactionView = (props) => {
         <FilledInput
           type="date"
           name="transactionDate"
+          error={touched.transactionDate && !valid.transactionDate}
           onChange={(event) => myChangeHandler(event)}
           defaultValue={
             getFromPropsOrDefaultValue('transactionDate') === ''
@@ -166,7 +219,7 @@ const SingleTransactionView = (props) => {
                   .split('T')[0]
           }
         />
-        <Button variant="contained" disabled={state.isLoading}>
+        <Button variant="contained" disabled={enableButton()}>
           {getButtonText(state.isEditMode)}
         </Button>
         <Dialog open={state.isLoading} PaperComponent="div">
