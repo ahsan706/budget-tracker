@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import Table from '@material-ui/core/Table';
 import TableHead from '@material-ui/core/TableHead';
@@ -13,6 +13,8 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 import axiosInstance from '../../axios/axios';
+import Dialog from '@material-ui/core/Dialog';
+import CircularProgress from '@material-ui/core/CircularProgress';
 const StyledTableCell = withStyles((theme) => ({
   head: {
     backgroundColor: theme.palette.common.black,
@@ -40,6 +42,7 @@ const styles = (theme) => ({
 });
 const ViewTransaction = (props) => {
   const [transactions, setTransactions] = React.useState([]);
+  const [isLoading, setIsLoading] = React.useState(false);
   React.useEffect(() => {
     if (props.updatedOrCreatedTransaction !== undefined) {
       const transactionsCopy = [...transactions];
@@ -56,8 +59,10 @@ const ViewTransaction = (props) => {
     }
   }, [props.updatedOrCreatedTransaction]);
   React.useEffect(async () => {
+    setIsLoading(true);
     const response = await axiosInstance.get('getAllTransaction');
     setTransactions(response.data.data);
+    setIsLoading(false);
   }, []);
   const onEditTransaction = (id) => {
     props.editTransaction(transactions.find((transaction) => transaction.id === id));
@@ -109,18 +114,23 @@ const ViewTransaction = (props) => {
     return tableList.concat(tableData);
   };
   return (
-    <TableContainer className={props.classes.root} aria-label="customized table">
-      <Table stickyHeader>
-        <TableHead>
-          <StyledTableRow key="header">
-            <StyledTableCell>Description</StyledTableCell>
-            <StyledTableCell>Amount</StyledTableCell>
-            <StyledTableCell>Transaction Date</StyledTableCell>
-          </StyledTableRow>
-        </TableHead>
-        <TableBody>{renderTableData(transactions)}</TableBody>
-      </Table>
-    </TableContainer>
+    <Fragment>
+      <TableContainer className={props.classes.root} aria-label="customized table">
+        <Table stickyHeader>
+          <TableHead>
+            <StyledTableRow key="header">
+              <StyledTableCell>Description</StyledTableCell>
+              <StyledTableCell>Amount</StyledTableCell>
+              <StyledTableCell>Transaction Date</StyledTableCell>
+            </StyledTableRow>
+          </TableHead>
+          <TableBody>{renderTableData(transactions)}</TableBody>
+        </Table>
+      </TableContainer>
+      <Dialog open={isLoading} PaperComponent="div">
+        <CircularProgress color="secondary" />
+      </Dialog>
+    </Fragment>
   );
 };
 ViewTransaction.propTypes = {

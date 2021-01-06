@@ -8,6 +8,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import FilledInput from '@material-ui/core/FilledInput';
 import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import axiosInstance from '../../axios/axios';
 const styles = (theme) => ({
   form: {
@@ -29,7 +30,8 @@ const SingleTransactionView = (props) => {
     description: '',
     amount: '',
     transactionDate: '',
-    isEditMode: false
+    isEditMode: false,
+    isLoading: false
   });
   React.useEffect(() => {
     if (
@@ -65,6 +67,10 @@ const SingleTransactionView = (props) => {
     return filtered;
   };
   const formSubmit = async (event) => {
+    setState({
+      ...state,
+      isLoading: true
+    });
     event.preventDefault();
     let response = {};
     if (state.isEditMode) {
@@ -79,6 +85,10 @@ const SingleTransactionView = (props) => {
       );
     }
     const transaction = response.data.data;
+    setState({
+      ...state,
+      isLoading: false
+    });
     props.updatedOrCreatedTransaction(transaction);
     handleClose();
   };
@@ -88,7 +98,8 @@ const SingleTransactionView = (props) => {
       description: '',
       amount: '',
       transactionDate: '',
-      isEditMode: false
+      isEditMode: false,
+      isLoading: false
     });
     props.dialogClosed();
   };
@@ -155,7 +166,12 @@ const SingleTransactionView = (props) => {
                   .split('T')[0]
           }
         />
-        <Button variant="contained">{getButtonText(state.isEditMode)}</Button>
+        <Button variant="contained" disabled={state.isLoading}>
+          {getButtonText(state.isEditMode)}
+        </Button>
+        <Dialog open={state.isLoading} PaperComponent="div">
+          <CircularProgress color="secondary" />
+        </Dialog>
       </form>
       <IconButton onClick={() => handleClose()} className={props.classes.topRight}>
         <CloseIcon />
