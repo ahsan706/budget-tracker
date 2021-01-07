@@ -15,6 +15,10 @@ import { withStyles } from '@material-ui/core/styles';
 import axiosInstance from '../../axios/axios';
 import Dialog from '@material-ui/core/Dialog';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogActions from '@material-ui/core/DialogActions';
+import Button from '@material-ui/core/Button';
 const StyledTableCell = withStyles((theme) => ({
   head: {
     backgroundColor: theme.palette.common.black,
@@ -42,7 +46,12 @@ const styles = (theme) => ({
 });
 const ViewTransaction = (props) => {
   const [transactions, setTransactions] = React.useState([]);
-  const [isLoading, setIsLoading] = React.useState(false);
+  const [dialogState, setDialogState] = React.useState({
+    isError: false,
+    showInfoDialog: false,
+    isLoading: false,
+    onDialogClosed: undefined
+  });
   React.useEffect(() => {
     if (props.updatedOrCreatedTransaction !== undefined) {
       const transactionsCopy = [...transactions];
@@ -58,23 +67,44 @@ const ViewTransaction = (props) => {
       setTransactions(transactionsCopy);
     }
   }, [props.updatedOrCreatedTransaction]);
-  React.useEffect(async () => {
-    setIsLoading(true);
-    const response = await axiosInstance.get('getAllTransaction');
-    setTransactions(response.data.data);
-    setIsLoading(false);
-  }, []);
+  const getDataFromServer = async () => {
+    setDialogState({ ...dialogState, isLoading: true });
+    const newDialogState = { ...dialogState };
+    try {
+      const response = await axiosInstance.get('getAllTransaction');
+      setTransactions(response.data.data);
+    } catch (err) {
+      newDialogState.isError = true;
+      newDialogState.showInfoDialog = true;
+      newDialogState.onDialogClosed = getDataFromServer;
+    } finally {
+      newDialogState.isLoading = false;
+      setDialogState(newDialogState);
+    }
+  };
+  React.useEffect(async () => getDataFromServer(), []);
   const onEditTransaction = (id) => {
     props.editTransaction(transactions.find((transaction) => transaction.id === id));
   };
   const onDeleteTransaction = async (id) => {
-    await axiosInstance.delete('deleteTransaction', { id });
-    const transactionsCopy = [...transactions];
-    const indexOfTransaction = transactionsCopy.findIndex(
-      (transaction) => transaction.id === id
-    );
-    transactionsCopy.splice(indexOfTransaction, 1);
-    setTransactions(transactionsCopy);
+    setDialogState({ ...dialogState, isLoading: true });
+    const newDialogState = { ...dialogState };
+    try {
+      await axiosInstance.delete('deleteTransaction', { id });
+      const transactionsCopy = [...transactions];
+      const indexOfTransaction = transactionsCopy.findIndex(
+        (transaction) => transaction.id === id
+      );
+      transactionsCopy.splice(indexOfTransaction, 1);
+      setTransactions(transactionsCopy);
+    } catch (err) {
+      newDialogState.isError = true;
+      newDialogState.showInfoDialog = true;
+      newDialogState.onDialogClosed = () => onDeleteTransaction(id);
+    } finally {
+      newDialogState.isLoading = false;
+      setDialogState(newDialogState);
+    }
   };
   const renderTableData = (transactionsToRender) => {
     const tableList = [];
@@ -113,6 +143,37 @@ const ViewTransaction = (props) => {
     });
     return tableList.concat(tableData);
   };
+  const infoDialogText = () => {
+    if (dialogState.isError) {
+      return 'Check your internet Connection.';
+    } else {
+      return 'Transaction Deleted.';
+    }
+  };
+  const InformationDialogue = () => {
+    const handleErrorDialogueClose = async () => {
+      const onDialogClosed = dialogState.onDialogClosed;
+      setDialogState({
+        ...dialogState,
+        showInfoDialog: false,
+        isError: false,
+        onDialogClosed: undefined
+      });
+      await onDialogClosed();
+    };
+    return (
+      <Dialog open={dialogState.showInfoDialog}>
+        <DialogContent>
+          <DialogContentText>{infoDialogText()}</DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleErrorDialogueClose} color="primary" autoFocus>
+            Ok
+          </Button>
+        </DialogActions>
+      </Dialog>
+    );
+  };
   return (
     <Fragment>
       <TableContainer className={props.classes.root} aria-label="customized table">
@@ -127,9 +188,10 @@ const ViewTransaction = (props) => {
           <TableBody>{renderTableData(transactions)}</TableBody>
         </Table>
       </TableContainer>
-      <Dialog open={isLoading} PaperComponent="div">
+      <Dialog open={dialogState.isLoading} PaperComponent="div">
         <CircularProgress color="secondary" />
       </Dialog>
+      <InformationDialogue />
     </Fragment>
   );
 };

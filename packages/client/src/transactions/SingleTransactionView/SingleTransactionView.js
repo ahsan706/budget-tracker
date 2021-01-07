@@ -10,6 +10,9 @@ import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import axiosInstance from '../../axios/axios';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogActions from '@material-ui/core/DialogActions';
 import { isNotEmpty, isNumber, isValidDate } from '../../utils/regexForValidation';
 const styles = (theme) => ({
   form: {
@@ -32,7 +35,9 @@ const SingleTransactionView = (props) => {
     amount: '',
     transactionDate: '',
     isEditMode: false,
-    isLoading: false
+    isLoading: false,
+    isError: false,
+    showInfoDialog: false
   });
   const [touched, setTouched] = React.useState({
     description: false,
@@ -104,12 +109,7 @@ const SingleTransactionView = (props) => {
       }, {});
     return filtered;
   };
-  const formSubmit = async (event) => {
-    setState({
-      ...state,
-      isLoading: true
-    });
-    event.preventDefault();
+  const sendDataToServer = async () => {
     let response = {};
     if (state.isEditMode) {
       response = await axiosInstance.put(
@@ -122,13 +122,30 @@ const SingleTransactionView = (props) => {
         getStateForServer(state)
       );
     }
-    const transaction = response.data.data;
+    return response.data.data;
+  };
+  const formSubmit = async (event) => {
     setState({
       ...state,
-      isLoading: false
+      isLoading: true
     });
-    props.updatedOrCreatedTransaction(transaction);
-    handleClose();
+    if (event) {
+      event.preventDefault();
+    }
+    const updatedState = {
+      ...state
+    };
+    try {
+      const transaction = await sendDataToServer();
+      props.updatedOrCreatedTransaction(transaction);
+      handleClose();
+    } catch (err) {
+      updatedState.showInfoDialog = true;
+      updatedState.isError = true;
+    } finally {
+      updatedState.isLoading = false;
+      setState(updatedState);
+    }
   };
   const handleClose = () => {
     setState({
@@ -137,7 +154,9 @@ const SingleTransactionView = (props) => {
       amount: '',
       transactionDate: '',
       isEditMode: false,
-      isLoading: false
+      isLoading: false,
+      showInfoDialog: false,
+      isError: false
     });
     setTouched({ description: false, amount: false, transactionDate: false });
     setValid({
@@ -173,6 +192,38 @@ const SingleTransactionView = (props) => {
       Object.values(touched).some((obj) => obj === true) &&
       Object.values(valid).every((obj) => obj === true) &&
       !state.isLoading
+    );
+  };
+  const infoDialogText = () => {
+    if (state.isError) {
+      return 'Check your internet Connection.';
+    } else {
+      if (state.isEditMode) {
+        return 'Transaction Edited.';
+      } else {
+        return 'Transaction Added.';
+      }
+    }
+  };
+  const InformationDialogue = () => {
+    const handleErrorDialogueClose = () => {
+      setState({
+        ...state,
+        showInfoDialog: false,
+        isError: false
+      });
+    };
+    return (
+      <Dialog open={state.showInfoDialog}>
+        <DialogContent>
+          <DialogContentText>{infoDialogText()}</DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleErrorDialogueClose} color="primary" autoFocus>
+            Ok
+          </Button>
+        </DialogActions>
+      </Dialog>
     );
   };
   return (
@@ -229,6 +280,7 @@ const SingleTransactionView = (props) => {
       <IconButton onClick={() => handleClose()} className={props.classes.topRight}>
         <CloseIcon />
       </IconButton>
+      <InformationDialogue />
     </Dialog>
   );
 };
