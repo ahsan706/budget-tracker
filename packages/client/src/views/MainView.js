@@ -1,6 +1,6 @@
 import React from 'react';
-import SingleTransactionView from './SingleTransactionView/SingleTransactionView';
-import ViewTransaction from './View/ViewTransaction';
+import AddOrUpdateTransaction from './transaction/AddOrUpdateTransaction';
+import TransactionsList from './transaction/transactionList/TransactionsList';
 import Button from '@material-ui/core/Button';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
@@ -11,7 +11,7 @@ const styles = (theme) => ({
   }
 });
 
-const Transaction = (props) => {
+const MainView = (props) => {
   const [transactionToBeEdited, setTransactionToBeEdited] = React.useState(
     undefined
   );
@@ -19,19 +19,20 @@ const Transaction = (props) => {
     createdOrUpdatedTransaction,
     setCreatedOrUpdatedTransaction
   ] = React.useState(undefined);
-  const [openSingleTransactionView, setOpenSingleTransactionView] = React.useState(
-    false
-  );
+  const [
+    openAddOrUpdateTransactionView,
+    setOpenAddOrUpdateTransactionView
+  ] = React.useState(false);
   const showAddTransaction = () => {
-    setOpenSingleTransactionView(true);
+    setOpenAddOrUpdateTransactionView(true);
   };
   const editTransaction = (transaction) => {
     setTransactionToBeEdited(transaction);
-    setOpenSingleTransactionView(true);
+    setOpenAddOrUpdateTransactionView(true);
   };
   const dialogClosed = () => {
     setTransactionToBeEdited(undefined);
-    setOpenSingleTransactionView(false);
+    setOpenAddOrUpdateTransactionView(false);
   };
   const updatedOrCreatedTransaction = (transaction) => {
     setCreatedOrUpdatedTransaction(transaction);
@@ -45,15 +46,15 @@ const Transaction = (props) => {
         onClick={() => showAddTransaction()}>
         Add Transaction
       </Button>
-      <SingleTransactionView
+      <AddOrUpdateTransaction
         editTransaction={transactionToBeEdited}
         updatedOrCreatedTransaction={(transaction) =>
           updatedOrCreatedTransaction(transaction)
         }
         dialogClosed={() => dialogClosed()}
-        open={openSingleTransactionView}
+        open={openAddOrUpdateTransactionView}
       />
-      <ViewTransaction
+      <TransactionsList
         editTransaction={(transaction) => editTransaction(transaction)}
         updatedOrCreatedTransaction={createdOrUpdatedTransaction}
         dialogClosed={() => dialogClosed()}
@@ -61,7 +62,7 @@ const Transaction = (props) => {
     </Paper>
   );
 };
-Transaction.propTypes = {
+MainView.propTypes = {
   classes: PropTypes.object.isRequired
 };
-export default withStyles(styles)(Transaction);
+export default withStyles(styles)(MainView);

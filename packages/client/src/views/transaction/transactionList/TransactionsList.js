@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import Table from '@material-ui/core/Table';
 import TableHead from '@material-ui/core/TableHead';
 import TableBody from '@material-ui/core/TableBody';
-import TableRow from '@material-ui/core/TableRow';
-import TableCell from '@material-ui/core/TableCell';
+import StyledTableCell from './table/StyledTableCell';
+import StyledTableRow from './table/StyledTableRow';
 import IconButton from '@material-ui/core/IconButton';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -12,30 +12,9 @@ import TableContainer from '@material-ui/core/TableContainer';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
-import axiosInstance from '../../axios/axios';
-import Dialog from '@material-ui/core/Dialog';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogActions from '@material-ui/core/DialogActions';
-import Button from '@material-ui/core/Button';
-const StyledTableCell = withStyles((theme) => ({
-  head: {
-    backgroundColor: theme.palette.common.black,
-    color: theme.palette.common.white
-  },
-  body: {
-    fontSize: 14
-  }
-}))(TableCell);
-
-const StyledTableRow = withStyles((theme) => ({
-  root: {
-    '&:nth-of-type(even)': {
-      backgroundColor: theme.palette.action.hover
-    }
-  }
-}))(TableRow);
+import axiosInstance from '../../../axios/axios';
+import InformationDialog from '../../UIComponents/InformationDialog';
+import LoadingDialog from '../../UIComponents/LoadingDialog';
 const styles = (theme) => ({
   root: {
     width: '100%',
@@ -44,7 +23,7 @@ const styles = (theme) => ({
     padding: `0 ${theme.spacing(1)} 0 ${theme.spacing(1)}`
   }
 });
-const ViewTransaction = (props) => {
+const TransactionsList = (props) => {
   const [transactions, setTransactions] = React.useState([]);
   const [dialogState, setDialogState] = React.useState({
     isError: false,
@@ -99,10 +78,10 @@ const ViewTransaction = (props) => {
       setTransactions(transactionsCopy);
     } catch (err) {
       newDialogState.isError = true;
-      newDialogState.showInfoDialog = true;
       newDialogState.onDialogClosed = () => onDeleteTransaction(id);
     } finally {
       newDialogState.isLoading = false;
+      newDialogState.showInfoDialog = true;
       setDialogState(newDialogState);
     }
   };
@@ -150,29 +129,18 @@ const ViewTransaction = (props) => {
       return 'Transaction Deleted.';
     }
   };
-  const InformationDialogue = () => {
-    const handleErrorDialogueClose = async () => {
-      const onDialogClosed = dialogState.onDialogClosed;
-      setDialogState({
-        ...dialogState,
-        showInfoDialog: false,
-        isError: false,
-        onDialogClosed: undefined
-      });
+  const handleErrorDialogueClose = async () => {
+    const onDialogClosed = dialogState.onDialogClosed;
+    setDialogState({
+      ...dialogState,
+      showInfoDialog: false,
+      isError: false,
+      onDialogClosed: undefined
+    });
+    // It will be available only in case of failed call retry.
+    if (onDialogClosed) {
       await onDialogClosed();
-    };
-    return (
-      <Dialog open={dialogState.showInfoDialog}>
-        <DialogContent>
-          <DialogContentText>{infoDialogText()}</DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleErrorDialogueClose} color="primary" autoFocus>
-            Ok
-          </Button>
-        </DialogActions>
-      </Dialog>
-    );
+    }
   };
   return (
     <Fragment>
@@ -188,16 +156,18 @@ const ViewTransaction = (props) => {
           <TableBody>{renderTableData(transactions)}</TableBody>
         </Table>
       </TableContainer>
-      <Dialog open={dialogState.isLoading} PaperComponent="div">
-        <CircularProgress color="secondary" />
-      </Dialog>
-      <InformationDialogue />
+      <LoadingDialog open={dialogState.isLoading} />
+      <InformationDialog
+        open={dialogState.showInfoDialog}
+        dialogText={infoDialogText()}
+        onClose={handleErrorDialogueClose}
+      />
     </Fragment>
   );
 };
-ViewTransaction.propTypes = {
+TransactionsList.propTypes = {
   editTransaction: PropTypes.func,
   updatedOrCreatedTransaction: PropTypes.any,
   classes: PropTypes.object.isRequired
 };
-export default withStyles(styles)(ViewTransaction);
+export default withStyles(styles)(TransactionsList);

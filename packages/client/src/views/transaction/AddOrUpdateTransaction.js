@@ -8,12 +8,11 @@ import InputLabel from '@material-ui/core/InputLabel';
 import FilledInput from '@material-ui/core/FilledInput';
 import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import axiosInstance from '../../axios/axios';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogActions from '@material-ui/core/DialogActions';
+import InformationDialog from '../UIComponents/InformationDialog';
 import { isNotEmpty, isNumber, isValidDate } from '../../utils/regexForValidation';
+import { filterKeyFromObject } from '../../utils/utils';
+import LoadingDialog from '../UIComponents/LoadingDialog';
 const styles = (theme) => ({
   form: {
     padding: theme.spacing(2),
@@ -28,47 +27,45 @@ const styles = (theme) => ({
     color: theme.palette.grey[500]
   }
 });
-const SingleTransactionView = (props) => {
-  const [state, setState] = React.useState({
-    id: -1,
-    description: '',
-    amount: '',
-    transactionDate: '',
-    isEditMode: false,
-    isLoading: false,
-    isError: false,
-    showInfoDialog: false
-  });
-  const [touched, setTouched] = React.useState({
-    description: false,
-    amount: false,
-    transactionDate: false
-  });
-  const [valid, setValid] = React.useState({
-    description: false,
-    amount: false,
-    transactionDate: false
-  });
+const initState = {
+  id: -1,
+  description: '',
+  amount: '',
+  transactionDate: '',
+  isEditMode: false,
+  isLoading: false,
+  isError: false,
+  showInfoDialog: false
+};
+const initTouchedAndValid = {
+  description: false,
+  amount: false,
+  transactionDate: false
+};
+const AddOrUpdateTransaction = (props) => {
+  const [state, setState] = React.useState(initState);
+  const [touched, setTouched] = React.useState(initTouchedAndValid);
+  const [valid, setValid] = React.useState(initTouchedAndValid);
   React.useEffect(() => {
     if (
       props.editTransaction !== undefined &&
       props.editTransaction.id !== state.id
     ) {
       setState({
+        ...initState,
         id: props.editTransaction.id,
         description: props.editTransaction.description,
         amount: props.editTransaction.amount,
         transactionDate: props.editTransaction.transactionDate,
         isEditMode: true
       });
-      checkValidationForAll();
+      setValid({
+        description: true,
+        amount: true,
+        transactionDate: true
+      });
     }
   }, [props.editTransaction]);
-  const checkValidationForAll = () => {
-    for (const [key, value] of Object.entries(object1)) {
-      checkValidation(key, value);
-    }
-  };
   const checkValidation = (name, value) => {
     const copyValid = {
       ...valid
@@ -83,8 +80,9 @@ const SingleTransactionView = (props) => {
         break;
       case 'transactionDate':
         copyValid[name] = isValidDate.test(value);
-        console.error(copyValid[name]);
         break;
+      default:
+        return;
     }
     setValid(copyValid);
   };
@@ -100,14 +98,7 @@ const SingleTransactionView = (props) => {
   };
   const getStateForServer = (originalState) => {
     const allowed = ['description', 'amount', 'transactionDate', 'id'];
-
-    const filtered = Object.keys(state)
-      .filter((key) => allowed.includes(key))
-      .reduce((obj, key) => {
-        obj[key] = originalState[key];
-        return obj;
-      }, {});
-    return filtered;
+    return filterKeyFromObject(originalState, allowed);
   };
   const sendDataToServer = async () => {
     let response = {};
@@ -138,31 +129,24 @@ const SingleTransactionView = (props) => {
     try {
       const transaction = await sendDataToServer();
       props.updatedOrCreatedTransaction(transaction);
-      handleClose();
+      updatedState.isError = false;
     } catch (err) {
-      updatedState.showInfoDialog = true;
       updatedState.isError = true;
     } finally {
       updatedState.isLoading = false;
+      updatedState.showInfoDialog = true;
       setState(updatedState);
     }
   };
   const handleClose = () => {
     setState({
-      id: -1,
-      description: '',
-      amount: '',
-      transactionDate: '',
-      isEditMode: false,
-      isLoading: false,
-      showInfoDialog: false,
-      isError: false
+      ...initState
     });
-    setTouched({ description: false, amount: false, transactionDate: false });
+    setTouched({
+      ...initTouchedAndValid
+    });
     setValid({
-      description: false,
-      amount: false,
-      transactionDate: false
+      ...initTouchedAndValid
     });
     props.dialogClosed();
   };
@@ -205,26 +189,17 @@ const SingleTransactionView = (props) => {
       }
     }
   };
-  const InformationDialogue = () => {
-    const handleErrorDialogueClose = () => {
-      setState({
-        ...state,
-        showInfoDialog: false,
-        isError: false
-      });
-    };
-    return (
-      <Dialog open={state.showInfoDialog}>
-        <DialogContent>
-          <DialogContentText>{infoDialogText()}</DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleErrorDialogueClose} color="primary" autoFocus>
-            Ok
-          </Button>
-        </DialogActions>
-      </Dialog>
-    );
+  const handleErrorDialogueClose = () => {
+    setState({
+      ...state,
+      showInfoDialog: false,
+      isError: false
+    });
+    if (state.isError) {
+      formSubmit();
+    } else {
+      handleClose();
+    }
   };
   return (
     <Dialog
@@ -235,7 +210,6 @@ const SingleTransactionView = (props) => {
       <DialogTitle id="simple-dialog-title">
         {getTileText(state.isEditMode)}
       </DialogTitle>
-
       <form
         onSubmit={(e) => formSubmit(e)}
         method="POST"
@@ -273,22 +247,24 @@ const SingleTransactionView = (props) => {
         <Button variant="contained" disabled={enableButton()}>
           {getButtonText(state.isEditMode)}
         </Button>
-        <Dialog open={state.isLoading} PaperComponent="div">
-          <CircularProgress color="secondary" />
-        </Dialog>
+        <LoadingDialog open={state.isLoading} />
       </form>
       <IconButton onClick={() => handleClose()} className={props.classes.topRight}>
         <CloseIcon />
       </IconButton>
-      <InformationDialogue />
+      <InformationDialog
+        open={state.showInfoDialog}
+        dialogText={infoDialogText()}
+        onClose={handleErrorDialogueClose}
+      />
     </Dialog>
   );
 };
-SingleTransactionView.propTypes = {
+AddOrUpdateTransaction.propTypes = {
   editTransaction: PropTypes.any,
   updatedOrCreatedTransaction: PropTypes.func,
   dialogClosed: PropTypes.func,
   open: PropTypes.bool,
   classes: PropTypes.object.isRequired
 };
-export default withStyles(styles)(SingleTransactionView);
+export default withStyles(styles)(AddOrUpdateTransaction);
