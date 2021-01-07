@@ -1,20 +1,22 @@
 import React, { Fragment } from 'react';
-import PropTypes from 'prop-types';
-import Table from '@material-ui/core/Table';
-import TableHead from '@material-ui/core/TableHead';
-import TableBody from '@material-ui/core/TableBody';
-import StyledTableCell from './table/StyledTableCell';
-import StyledTableRow from './table/StyledTableRow';
-import IconButton from '@material-ui/core/IconButton';
-import EditIcon from '@material-ui/icons/Edit';
-import DeleteIcon from '@material-ui/icons/Delete';
-import TableContainer from '@material-ui/core/TableContainer';
+
 import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
+import IconButton from '@material-ui/core/IconButton';
 import { withStyles } from '@material-ui/core/styles';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import Typography from '@material-ui/core/Typography';
+import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
+import PropTypes from 'prop-types';
+
 import axiosInstance from '../../../axios/axios';
 import InformationDialog from '../../UIComponents/InformationDialog';
 import LoadingDialog from '../../UIComponents/LoadingDialog';
+import StyledTableCell from './table/StyledTableCell';
+import StyledTableRow from './table/StyledTableRow';
 const styles = (theme) => ({
   root: {
     width: '100%',

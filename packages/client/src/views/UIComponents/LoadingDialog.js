@@ -1,7 +1,8 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import Dialog from '@material-ui/core/Dialog';
+
 import CircularProgress from '@material-ui/core/CircularProgress';
+import Dialog from '@material-ui/core/Dialog';
+import PropTypes from 'prop-types';
 const LoadingDialog = (props) => {
   return (
     <Dialog open={props.open} PaperComponent="div">

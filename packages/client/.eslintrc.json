@@ -8,7 +8,8 @@
     "google",
     "prettier",
     "prettier/prettier",
-    "prettier/react"
+    "prettier/react",
+    "plugin:import/errors"
   ],
   "parserOptions": {
     "ecmaFeatures": {
@@ -25,6 +26,25 @@
   "plugins": ["react"],
   "rules": {
     "require-jsdoc": "off",
-    "no-unused-vars": "warn"
+    "no-unused-vars": "warn",
+    "import/order": [
+      "error",
+      {
+        "groups": ["builtin", "external", "internal"],
+        "pathGroups": [
+          {
+            "pattern": "react",
+            "group": "external",
+            "position": "before"
+          }
+        ],
+        "pathGroupsExcludedImportTypes": ["react"],
+        "newlines-between": "always",
+        "alphabetize": {
+          "order": "asc",
+          "caseInsensitive": true
+        }
+      }
+    ]
   }
 }

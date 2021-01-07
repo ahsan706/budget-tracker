@@ -1,10 +1,13 @@
 import React from 'react';
+
+import Button from '@material-ui/core/Button';
+import Paper from '@material-ui/core/Paper';
+import { withStyles } from '@material-ui/core/styles';
+import PropTypes from 'prop-types';
+
 import AddOrUpdateTransaction from './transaction/AddOrUpdateTransaction';
 import TransactionsList from './transaction/transactionList/TransactionsList';
-import Button from '@material-ui/core/Button';
-import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
+
 const styles = (theme) => ({
   addButton: {
     margin: theme.spacing(2)

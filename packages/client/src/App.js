@@ -1,11 +1,13 @@
 import React from 'react';
-import Transaction from './views/MainView';
-import CssBaseline from '@material-ui/core/CssBaseline';
+
 import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
+import CssBaseline from '@material-ui/core/CssBaseline';
 import Link from '@material-ui/core/Link';
+import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import AttachMoney from '@material-ui/icons/AttachMoney';
+
+import Transaction from './views/MainView';
 
 const App = () => {
   return (

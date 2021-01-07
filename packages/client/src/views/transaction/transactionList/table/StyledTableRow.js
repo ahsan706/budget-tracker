@@ -1,5 +1,5 @@
-import TableRow from '@material-ui/core/TableRow';
 import { withStyles } from '@material-ui/core/styles';
+import TableRow from '@material-ui/core/TableRow';
 const StyledTableRow = withStyles((theme) => ({
   root: {
     '&:nth-of-type(even)': {
