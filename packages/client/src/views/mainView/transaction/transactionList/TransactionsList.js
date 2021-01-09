@@ -11,10 +11,11 @@ import Typography from '@material-ui/core/Typography';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 
-import axiosInstance from '../../../axios/axios';
-import InformationDialog from '../../UIComponents/InformationDialog';
-import LoadingDialog from '../../UIComponents/LoadingDialog';
+import axiosInstance from '../../../../axios/axios';
+import InformationDialog from '../../../UIComponents/InformationDialog';
+import LoadingDialog from '../../../UIComponents/LoadingDialog';
 import StyledTableCell from './table/StyledTableCell';
 import StyledTableRow from './table/StyledTableRow';
 const styles = (theme) => ({
@@ -26,6 +27,7 @@ const styles = (theme) => ({
   }
 });
 const TransactionsList = (props) => {
+  const { t, ready } = useTranslation('translation', { useSuspense: false });
   const [transactions, setTransactions] = React.useState([]);
   const [dialogState, setDialogState] = React.useState({
     isError: false,
@@ -126,9 +128,9 @@ const TransactionsList = (props) => {
   };
   const infoDialogText = () => {
     if (dialogState.isError) {
-      return 'Check your internet Connection.';
+      return ready && t('Common.error-message');
     } else {
-      return 'Transaction Deleted.';
+      return ready && t('Common.transaction-deleted');
     }
   };
   const handleErrorDialogueClose = async () => {
@@ -150,9 +152,13 @@ const TransactionsList = (props) => {
         <Table stickyHeader>
           <TableHead>
             <StyledTableRow key="header">
-              <StyledTableCell>Description</StyledTableCell>
-              <StyledTableCell>Amount</StyledTableCell>
-              <StyledTableCell>Transaction Date</StyledTableCell>
+              <StyledTableCell>
+                {ready ? t('Common.description') : null}
+              </StyledTableCell>
+              <StyledTableCell>{ready ? t('Common.amount') : null}</StyledTableCell>
+              <StyledTableCell>
+                {ready ? t('Common.transaction-date') : null}
+              </StyledTableCell>
             </StyledTableRow>
           </TableHead>
           <TableBody>{renderTableData(transactions)}</TableBody>

@@ -6,7 +6,9 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 const InformationDialog = (props) => {
+  const { t, ready } = useTranslation('translation', { useSuspense: false });
   return (
     <Dialog open={props.open}>
       <DialogContent>
@@ -14,7 +16,7 @@ const InformationDialog = (props) => {
       </DialogContent>
       <DialogActions>
         <Button onClick={props.onClose} color="primary" autoFocus>
-          Ok
+          {ready ? t('Common.ok') : null}
         </Button>
       </DialogActions>
     </Dialog>

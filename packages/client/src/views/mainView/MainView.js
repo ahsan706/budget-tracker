@@ -4,6 +4,7 @@ import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 
 import AddOrUpdateTransaction from './transaction/AddOrUpdateTransaction';
 import TransactionsList from './transaction/transactionList/TransactionsList';
@@ -15,6 +16,7 @@ const styles = (theme) => ({
 });
 
 const MainView = (props) => {
+  const { t, ready } = useTranslation('translation', { useSuspense: false });
   const [transactionToBeEdited, setTransactionToBeEdited] = React.useState(
     undefined
   );
@@ -47,7 +49,7 @@ const MainView = (props) => {
         className={classes.addButton}
         variant="contained"
         onClick={() => showAddTransaction()}>
-        Add Transaction
+        {ready ? t('App.MainView.add-transaction') : null}
       </Button>
       <AddOrUpdateTransaction
         editTransaction={transactionToBeEdited}

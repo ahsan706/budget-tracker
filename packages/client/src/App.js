@@ -1,47 +1,31 @@
 import React from 'react';
 
-import AppBar from '@material-ui/core/AppBar';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import Link from '@material-ui/core/Link';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import AttachMoney from '@material-ui/icons/AttachMoney';
+import i18n from 'i18next';
 
-import Transaction from './views/MainView';
-
+import Footer from './views/footer/Footer';
+import Header from './views/header/Header';
+import Transaction from './views/mainView/MainView';
+import LoadingDialog from './views/UIComponents/LoadingDialog';
 const App = () => {
-  return (
+  const [translationLoaded, setTranslationLoaded] = React.useState(false);
+  i18n.on('initialized', (options) => {
+    setTranslationLoaded(true);
+  });
+  return translationLoaded ? (
     <CssBaseline>
-      <AppBar position="relative">
-        <Toolbar>
-          <AttachMoney />
-          <Typography variant="h6" color="inherit" noWrap>
-            Budget Tracker
-          </Typography>
-        </Toolbar>
-      </AppBar>
+      <header>
+        <Header />
+      </header>
       <main>
         <Transaction />
       </main>
       <footer>
-        <Typography variant="h6" align="center" gutterBottom>
-          Footer
-        </Typography>
-        <Copyright />
+        <Footer />
       </footer>
     </CssBaseline>
+  ) : (
+    <LoadingDialog open={true} />
   );
 };
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" href="https://m-ahsan.com">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
 export default App;

@@ -1,0 +1,26 @@
+{
+  "App": {
+    "Header": {
+      "title": "Budget Tracker"
+    },
+    "Footer": {
+      "footer": "Footer",
+      "your-website": "Your Website"
+    },
+    "MainView": {
+      "add-transaction": "Add Transaction"
+    }
+  },
+  "Common": {
+    "ok": "Ok",
+    "description": "Description",
+    "amount": "Amount",
+    "transaction-date": "Transaction Date",
+    "error-message": "Check your Internet Connection.",
+    "transaction-edited": "Transaction Edited.",
+    "transaction-added": "Transaction Added.",
+    "transaction-deleted": "Transaction Deleted.",
+    "add": "Add",
+    "edit": "Edit"
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "App": {
+    "Header": {
+      "title": "Budgetspårare"
+    },
+    "Footer": {
+      "footer": "Sidfot",
+      "your-website": "Din hemsida"
+    },
+    "MainView": {
+      "add-transaction": "Lägg till transaktion"
+    }
+  },
+  "Common": {
+    "ok": "Ok",
+    "description": "Beskrivning",
+    "amount": "Belopp",
+    "transaction-date": "Transaktions Datum",
+    "error-message": "Kontrollera din Internetanslutning.",
+    "transaction-edited": "Transaktion redigerad.",
+    "transaction-added": "Transaktion tillagd.",
+    "transaction-deleted": "Transaktion borttagen.",
+    "add": "Lägg till",
+    "edit": "Redigera"
+  }
+}

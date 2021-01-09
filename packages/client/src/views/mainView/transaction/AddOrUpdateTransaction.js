@@ -9,12 +9,17 @@ import InputLabel from '@material-ui/core/InputLabel';
 import { withStyles } from '@material-ui/core/styles';
 import CloseIcon from '@material-ui/icons/Close';
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 
-import axiosInstance from '../../axios/axios';
-import { isNotEmpty, isNumber, isValidDate } from '../../utils/regexForValidation';
-import { filterKeyFromObject } from '../../utils/utils';
-import InformationDialog from '../UIComponents/InformationDialog';
-import LoadingDialog from '../UIComponents/LoadingDialog';
+import axiosInstance from '../../../axios/axios';
+import {
+  isNotEmpty,
+  isNumber,
+  isValidDate
+} from '../../../utils/regexForValidation';
+import { filterKeyFromObject } from '../../../utils/utils';
+import InformationDialog from '../../UIComponents/InformationDialog';
+import LoadingDialog from '../../UIComponents/LoadingDialog';
 const styles = (theme) => ({
   form: {
     padding: theme.spacing(2),
@@ -48,6 +53,7 @@ const AddOrUpdateTransaction = (props) => {
   const [state, setState] = React.useState(initState);
   const [touched, setTouched] = React.useState(initTouchedAndValid);
   const [valid, setValid] = React.useState(initTouchedAndValid);
+  const { t, ready } = useTranslation('translation', { useSuspense: false });
   React.useEffect(() => {
     if (
       props.editTransaction !== undefined &&
@@ -152,18 +158,18 @@ const AddOrUpdateTransaction = (props) => {
     });
     props.dialogClosed();
   };
-  const getTileText = (isEditMode) => {
+  const getTitleText = (isEditMode) => {
     if (isEditMode) {
-      return 'Edit Transaction';
+      return ready && t('Common.transaction-edited');
     } else {
-      return 'Add Transaction';
+      return ready && t('Common.transaction-added');
     }
   };
   const getButtonText = (isEditMode) => {
     if (isEditMode) {
-      return 'Edit';
+      return ready && t('Common.edit');
     } else {
-      return 'Add';
+      return ready && t('Common.add');
     }
   };
   const getFromPropsOrDefaultValue = (key) => {
@@ -182,12 +188,12 @@ const AddOrUpdateTransaction = (props) => {
   };
   const infoDialogText = () => {
     if (state.isError) {
-      return 'Check your internet Connection.';
+      return ready && t('Common.error-message');
     } else {
       if (state.isEditMode) {
-        return 'Transaction Edited.';
+        return ready && t('Common.transaction-edited');
       } else {
-        return 'Transaction Added.';
+        return ready && t('Common.transaction-added');
       }
     }
   };
@@ -210,13 +216,13 @@ const AddOrUpdateTransaction = (props) => {
       fullWidth={true}
       maxWidth={false}>
       <DialogTitle id="simple-dialog-title">
-        {getTileText(state.isEditMode)}
+        {getTitleText(state.isEditMode)}
       </DialogTitle>
       <form
         onSubmit={(e) => formSubmit(e)}
         method="POST"
         className={props.classes.form}>
-        <InputLabel>Description</InputLabel>
+        <InputLabel>{ready ? t('Common.description') : null}</InputLabel>
         <FilledInput
           type="text"
           name="description"
@@ -224,7 +230,7 @@ const AddOrUpdateTransaction = (props) => {
           error={touched.description && !valid.description}
           defaultValue={getFromPropsOrDefaultValue('description')}
         />
-        <InputLabel>Amount</InputLabel>
+        <InputLabel>{ready ? t('Common.amount') : null}</InputLabel>
         <FilledInput
           type="number"
           name="amount"
@@ -232,7 +238,7 @@ const AddOrUpdateTransaction = (props) => {
           onChange={(event) => myChangeHandler(event)}
           defaultValue={getFromPropsOrDefaultValue('amount')}
         />
-        <InputLabel>Date</InputLabel>
+        <InputLabel>{ready ? t('Common.transaction-date') : null}</InputLabel>
         <FilledInput
           type="date"
           name="transactionDate"
