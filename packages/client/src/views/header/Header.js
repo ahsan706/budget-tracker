@@ -17,9 +17,6 @@ const styles = (theme) => ({
   root: {
     flexGrow: 1
   },
-  menuButton: {
-    marginRight: theme.spacing(2)
-  },
   title: {
     flexGrow: 1
   }
@@ -38,7 +35,7 @@ const Header = (props) => {
     setAnchorEl(undefined);
   };
   return (
-    <AppBar position="relative" className={props.classes.root}>
+    <AppBar position="relative">
       <Toolbar>
         <AttachMoney />
         <Typography

@@ -25,6 +25,9 @@
       "prettier --write",
       "eslint --fix"
     ],
+    "packages/client/**/*.js": [
+      "yarn --cwd packages/client test:staged"
+    ],
     "*.{html,json}": [
       "prettier --write"
     ]

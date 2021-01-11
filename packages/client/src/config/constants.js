@@ -1,2 +1,3 @@
 const BASE_URL = process.env.REACT_APP_SERVER_URL || 'http://localhost:8080/';
-export default BASE_URL;
+const isProduction = process.env.NODE_ENV === 'production';
+export { BASE_URL, isProduction };

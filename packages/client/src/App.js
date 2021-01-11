@@ -7,11 +7,14 @@ import Footer from './views/footer/Footer';
 import Header from './views/header/Header';
 import Transaction from './views/mainView/MainView';
 import LoadingDialog from './views/UIComponents/LoadingDialog';
+
 const App = () => {
   const [translationLoaded, setTranslationLoaded] = React.useState(false);
-  i18n.on('initialized', (options) => {
-    setTranslationLoaded(true);
-  });
+  React.useEffect(() => {
+    i18n.on('initialized', () => {
+      setTranslationLoaded(true);
+    });
+  }, []);
   return translationLoaded ? (
     <CssBaseline>
       <header>
@@ -28,4 +31,5 @@ const App = () => {
     <LoadingDialog open={true} />
   );
 };
+
 export default App;

@@ -24,6 +24,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "test:staged": "cross-env CI=true react-scripts test --findRelatedTests",
     "eject": "react-scripts eject",
     "lint": "eslint 'src/**/*.js'",
     "lint-fix": "eslint --fix 'src/**/*.js'",
@@ -42,6 +43,7 @@
     ]
   },
   "devDependencies": {
+    "cross-env": "^7.0.3",
     "eslint": "^7.16.0",
     "eslint-config-google": "^0.14.0",
     "eslint-config-prettier": "^7.1.0",

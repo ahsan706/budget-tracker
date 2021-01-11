@@ -2,11 +2,12 @@ import React from 'react';
 
 import { render, screen } from '@testing-library/react';
 
-
 import App from './App';
+jest.mock('i18next', () => require('./mock/translationMock').mockI18next);
 
-test('renders learn react link', () => {
+jest.mock('react-i18next', () => require('./mock/translationMock').mockReactI18next);
+test('renders Budget Tracker', async () => {
   render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
+  const linkElement = screen.getByText(/Budget Tracker/i);
   expect(linkElement).toBeInTheDocument();
 });
