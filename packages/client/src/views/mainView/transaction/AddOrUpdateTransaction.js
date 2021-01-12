@@ -110,16 +110,15 @@ const AddOrUpdateTransaction = (props) => {
   };
   const sendDataToServer = async () => {
     let response = {};
+    const stateToServer = {
+      ...getStateForServer(state),
+      amount: parseInt(state.amount, 10),
+      transactionDate: new Date(state.transactionDate).toISOString()
+    };
     if (state.isEditMode) {
-      response = await axiosInstance.put(
-        'editTransaction',
-        getStateForServer(state)
-      );
+      response = await axiosInstance.put('editTransaction', stateToServer);
     } else {
-      response = await axiosInstance.post(
-        'addTransaction',
-        getStateForServer(state)
-      );
+      response = await axiosInstance.post('addTransaction', stateToServer);
     }
     return response.data.data;
   };
