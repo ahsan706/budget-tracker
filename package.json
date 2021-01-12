@@ -28,6 +28,9 @@
     "packages/client/**/*.js": [
       "yarn --cwd packages/client test:staged"
     ],
+    "packages/server/**/*.js": [
+      "yarn --cwd packages/server test:staged"
+    ],
     "*.{html,json}": [
       "prettier --write"
     ]

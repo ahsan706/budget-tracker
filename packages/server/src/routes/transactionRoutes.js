@@ -1,6 +1,6 @@
-const router = require('express').Router();
-
-router.get('/', function (req, res) {
+const express = require('express');
+const routes = new express.Router();
+routes.get('/', function (req, res) {
   res.json({
     status: 'API Works',
     message: 'Welcome to FirstRest API'
@@ -8,9 +8,9 @@ router.get('/', function (req, res) {
 });
 const transactionController = require('../controllers/transactionController');
 
-router.route('/getAllTransaction').get(transactionController.getAll);
-router.route('/addTransaction').post(transactionController.add);
-router.route('/deleteTransaction').delete(transactionController.delete);
-router.route('/editTransaction').put(transactionController.update);
+routes.get('/getAllTransaction', transactionController.getAll);
+routes.post('/addTransaction', transactionController.add);
+routes.delete('/deleteTransaction', transactionController.delete);
+routes.put('/editTransaction', transactionController.update);
 
-module.exports = router;
+module.exports = routes;
