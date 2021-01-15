@@ -11,22 +11,17 @@ i18n
   .use(LanguageDetector)
   // init i18next
   // for all options read: https://www.i18next.com/overview/configuration-options
-  .init(
-    {
-      fallbackLng: 'en',
-      debug: !isProduction,
-      lng: 'en',
-      getAsync: false,
-      initImmediate: true,
-      interpolation: {
-        escapeValue: false // not needed for react as it escapes by default
-      },
-      react: {
-        wait: true,
-        useSuspense: false
-      }
+  .init({
+    fallbackLng: 'en',
+    debug: !isProduction,
+    lng: 'en',
+    getAsync: false,
+    initImmediate: true,
+    interpolation: {
+      escapeValue: false // not needed for react as it escapes by default
     },
-    () => {
-      console.error('Bol');
+    react: {
+      wait: true,
+      useSuspense: false
     }
-  );
+  });

@@ -3,33 +3,18 @@ import React from 'react';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import i18n from 'i18next';
 
-import Footer from './views/footer/Footer';
-import Header from './views/header/Header';
-import Transaction from './views/mainView/MainView';
+import Dashboard from './views/dashBoard/Dashboard';
 import LoadingDialog from './views/UIComponents/LoadingDialog';
-
-const App = () => {
+export default function App() {
   const [translationLoaded, setTranslationLoaded] = React.useState(false);
   React.useEffect(() => {
     i18n.on('initialized', () => {
       setTranslationLoaded(true);
     });
   }, []);
-  return translationLoaded ? (
+  return (
     <CssBaseline>
-      <header>
-        <Header />
-      </header>
-      <main>
-        <Transaction />
-      </main>
-      <footer>
-        <Footer />
-      </footer>
+      {translationLoaded ? <Dashboard /> : <LoadingDialog open={true} />}
     </CssBaseline>
-  ) : (
-    <LoadingDialog open={true} />
   );
-};
-
-export default App;
+}

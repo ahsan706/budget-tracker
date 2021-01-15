@@ -6,23 +6,24 @@ import IconButton from '@material-ui/core/IconButton';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import Popover from '@material-ui/core/Popover';
-import { withStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import AttachMoney from '@material-ui/icons/AttachMoney';
 import LanguageIcon from '@material-ui/icons/Language';
-import PropTypes from 'prop-types';
-import { useTranslation } from 'react-i18next';
-const styles = (theme) => ({
+
+import useTranslation from '../../../utils/translation';
+const useStyles = makeStyles(() => ({
   root: {
     flexGrow: 1
   },
   title: {
     flexGrow: 1
   }
-});
-const Header = (props) => {
-  const { t, i18n, ready } = useTranslation('translation', { useSuspense: false });
+}));
+export default function Header() {
+  const classes = useStyles();
+  const { t, i18n, ready } = useTranslation();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const onChangeLanguage = (lang) => {
     i18n.changeLanguage(lang);
@@ -38,11 +39,7 @@ const Header = (props) => {
     <AppBar position="relative">
       <Toolbar>
         <AttachMoney />
-        <Typography
-          variant="h6"
-          color="inherit"
-          noWrap
-          className={props.classes.title}>
+        <Typography variant="h6" color="inherit" noWrap className={classes.title}>
           {ready ? t('App.Header.title') : null}
         </Typography>
 
@@ -73,8 +70,5 @@ const Header = (props) => {
       </Popover>
     </AppBar>
   );
-};
-Header.propTypes = {
-  classes: PropTypes.object.isRequired
-};
-export default withStyles(styles)(Header);
+}
+Header;

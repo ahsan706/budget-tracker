@@ -11,11 +11,11 @@ import Typography from '@material-ui/core/Typography';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import PropTypes from 'prop-types';
-import { useTranslation } from 'react-i18next';
 
-import axiosInstance from '../../../../axios/axios';
-import InformationDialog from '../../../UIComponents/InformationDialog';
-import LoadingDialog from '../../../UIComponents/LoadingDialog';
+import axiosInstance from '../../../../../axios/axios';
+import useTranslation from '../../../../../utils/translation';
+import InformationDialog from '../../../../UIComponents/InformationDialog';
+import LoadingDialog from '../../../../UIComponents/LoadingDialog';
 import StyledTableCell from './table/StyledTableCell';
 import StyledTableRow from './table/StyledTableRow';
 const styles = (theme) => ({
@@ -27,7 +27,7 @@ const styles = (theme) => ({
   }
 });
 const TransactionsList = (props) => {
-  const { t, ready } = useTranslation('translation', { useSuspense: false });
+  const { t, ready } = useTranslation();
   const [transactions, setTransactions] = React.useState([]);
   const [dialogState, setDialogState] = React.useState({
     isError: false,

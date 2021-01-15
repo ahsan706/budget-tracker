@@ -9,17 +9,17 @@ import InputLabel from '@material-ui/core/InputLabel';
 import { withStyles } from '@material-ui/core/styles';
 import CloseIcon from '@material-ui/icons/Close';
 import PropTypes from 'prop-types';
-import { useTranslation } from 'react-i18next';
 
-import axiosInstance from '../../../axios/axios';
+import axiosInstance from '../../../../axios/axios';
 import {
   isNotEmpty,
   isNumber,
   isValidDate
-} from '../../../utils/regexForValidation';
-import { filterKeyFromObject } from '../../../utils/utils';
-import InformationDialog from '../../UIComponents/InformationDialog';
-import LoadingDialog from '../../UIComponents/LoadingDialog';
+} from '../../../../utils/regexForValidation';
+import useTranslation from '../../../../utils/translation';
+import { filterKeyFromObject } from '../../../../utils/utils';
+import InformationDialog from '../../../UIComponents/InformationDialog';
+import LoadingDialog from '../../../UIComponents/LoadingDialog';
 const styles = (theme) => ({
   form: {
     padding: theme.spacing(2),
@@ -53,7 +53,7 @@ const AddOrUpdateTransaction = (props) => {
   const [state, setState] = React.useState(initState);
   const [touched, setTouched] = React.useState(initTouchedAndValid);
   const [valid, setValid] = React.useState(initTouchedAndValid);
-  const { t, ready } = useTranslation('translation', { useSuspense: false });
+  const { t, ready } = useTranslation();
   React.useEffect(() => {
     if (
       props.editTransaction !== undefined &&

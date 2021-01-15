@@ -2,21 +2,21 @@ import React from 'react';
 
 import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
-import { withStyles } from '@material-ui/core/styles';
-import PropTypes from 'prop-types';
-import { useTranslation } from 'react-i18next';
+import { makeStyles } from '@material-ui/core/styles';
 
+import useTranslation from '../../../utils/translation';
 import AddOrUpdateTransaction from './transaction/AddOrUpdateTransaction';
 import TransactionsList from './transaction/transactionList/TransactionsList';
 
-const styles = (theme) => ({
+const useStyles = makeStyles((theme) => ({
   addButton: {
     margin: theme.spacing(2)
   }
-});
+}));
 
-const MainView = (props) => {
-  const { t, ready } = useTranslation('translation', { useSuspense: false });
+export default function MainView() {
+  const classes = useStyles();
+  const { t, ready } = useTranslation();
   const [transactionToBeEdited, setTransactionToBeEdited] = React.useState(
     undefined
   );
@@ -42,7 +42,6 @@ const MainView = (props) => {
   const updatedOrCreatedTransaction = (transaction) => {
     setCreatedOrUpdatedTransaction(transaction);
   };
-  const { classes } = props;
   return (
     <Paper>
       <Button
@@ -66,8 +65,4 @@ const MainView = (props) => {
       />
     </Paper>
   );
-};
-MainView.propTypes = {
-  classes: PropTypes.object.isRequired
-};
-export default withStyles(styles)(MainView);
+}
