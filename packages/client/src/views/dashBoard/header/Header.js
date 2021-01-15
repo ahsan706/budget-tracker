@@ -11,7 +11,10 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import AttachMoney from '@material-ui/icons/AttachMoney';
 import LanguageIcon from '@material-ui/icons/Language';
+import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
+import PropTypes from 'prop-types';
 
+import { useAuthContext } from '../../../context/authContext';
 import useTranslation from '../../../utils/translation';
 const useStyles = makeStyles(() => ({
   root: {
@@ -21,10 +24,11 @@ const useStyles = makeStyles(() => ({
     flexGrow: 1
   }
 }));
-export default function Header() {
+export default function Header(props) {
   const classes = useStyles();
   const { t, i18n, ready } = useTranslation();
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const auth = useAuthContext();
   const onChangeLanguage = (lang) => {
     i18n.changeLanguage(lang);
     handleClose();
@@ -32,11 +36,15 @@ export default function Header() {
   const openChangeLanguagePopOver = (event) => {
     setAnchorEl(event.currentTarget);
   };
+  const openLogOutClicked = (event) => {
+    auth.signOut();
+    props.history.replace('/');
+  };
   const handleClose = () => {
     setAnchorEl(undefined);
   };
   return (
-    <AppBar position="relative">
+    <AppBar position="relative" component="div">
       <Toolbar>
         <AttachMoney />
         <Typography variant="h6" color="inherit" noWrap className={classes.title}>
@@ -45,6 +53,9 @@ export default function Header() {
 
         <IconButton onClick={(event) => openChangeLanguagePopOver(event)}>
           <LanguageIcon style={{ color: 'white' }} />
+        </IconButton>
+        <IconButton onClick={(event) => openLogOutClicked(event)}>
+          <PowerSettingsNewIcon style={{ color: 'white' }} />
         </IconButton>
       </Toolbar>
       <Popover
@@ -71,4 +82,6 @@ export default function Header() {
     </AppBar>
   );
 }
-Header;
+Header.propTypes = {
+  history: PropTypes.any
+};

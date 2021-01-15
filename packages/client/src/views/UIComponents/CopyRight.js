@@ -8,7 +8,7 @@ export default function CopyRight() {
   const { t, ready } = useTranslation();
   return (
     <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
+      {'CopyRight © '}
       <Link color="inherit" href="https://m-ahsan.com">
         {ready ? t('App.Footer.footer') : null}
       </Link>{' '}

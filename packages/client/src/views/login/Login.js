@@ -13,8 +13,10 @@ import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import PropTypes from 'prop-types';
 
-import Copyright from '../UIComponents/CopyRight';
+import { useAuthContext } from '../../context/authContext';
+import CopyRight from '../UIComponents/CopyRight';
 const useStyles = makeStyles((theme) => ({
   root: {
     height: '100vh'
@@ -48,9 +50,14 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function Login() {
+export default function Login(props) {
   const classes = useStyles();
-
+  const auth = useAuthContext();
+  const onSignInClicked = (event) => {
+    event.preventDefault(0);
+    auth.signIn();
+    props.history.replace('/');
+  };
   return (
     <Grid container component="main" className={classes.root}>
       <CssBaseline />
@@ -95,7 +102,8 @@ export default function Login() {
               fullWidth
               variant="contained"
               color="primary"
-              className={classes.submit}>
+              className={classes.submit}
+              onClick={onSignInClicked}>
               Sign In
             </Button>
             <Grid container>
@@ -111,7 +119,7 @@ export default function Login() {
               </Grid>
             </Grid>
             <Box mt={5}>
-              <Copyright />
+              <CopyRight />
             </Box>
           </form>
         </div>
@@ -119,3 +127,6 @@ export default function Login() {
     </Grid>
   );
 }
+Login.propTypes = {
+  history: PropTypes.any
+};
