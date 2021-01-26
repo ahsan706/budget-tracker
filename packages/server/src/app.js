@@ -1,9 +1,12 @@
 const express = require('express');
 const cors = require('cors');
-const apiRoutes = require('./routes/transactionRoutes');
+const jwt = require('./security/auth0');
+const getRoutes = require('./routes/transactionRoutes');
 
 const databaseHelper = require('./helper/database');
-function database() {
+
+require('dotenv').config({ path: './.env' });
+const database = () => {
   databaseHelper.connect().then(
     () => {
       console.log('connected DB');
@@ -12,16 +15,16 @@ function database() {
       console.log(error, 'error');
     }
   );
-}
-function middlewares() {
+};
+const middleWares = () => {
   app.use(cors());
   app.use(express.json());
-}
-function routes() {
-  app.use('/', apiRoutes);
-}
+};
+const routes = (checkJwt) => {
+  app.use('/', getRoutes(checkJwt));
+};
 const app = express();
 database();
-middlewares();
-routes();
+middleWares();
+routes(jwt());
 module.exports = app;

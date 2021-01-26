@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { useAuth0 } from '@auth0/auth0-react';
 import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
@@ -14,7 +15,6 @@ import LanguageIcon from '@material-ui/icons/Language';
 import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
 import PropTypes from 'prop-types';
 
-import { useAuthContext } from '../../../context/authContext';
 import useTranslation from '../../../utils/translation';
 const useStyles = makeStyles(() => ({
   root: {
@@ -25,10 +25,10 @@ const useStyles = makeStyles(() => ({
   }
 }));
 export default function Header(props) {
+  const { logout } = useAuth0();
   const classes = useStyles();
   const { t, i18n, ready } = useTranslation();
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const auth = useAuthContext();
   const onChangeLanguage = (lang) => {
     i18n.changeLanguage(lang);
     handleClose();
@@ -37,7 +37,7 @@ export default function Header(props) {
     setAnchorEl(event.currentTarget);
   };
   const openLogOutClicked = (event) => {
-    auth.signOut();
+    logout();
     props.history.replace('/');
   };
   const handleClose = () => {

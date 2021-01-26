@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
 
+import { useAuth0 } from '@auth0/auth0-react';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import { withStyles } from '@material-ui/core/styles';
@@ -27,7 +28,8 @@ const styles = (theme) => ({
   }
 });
 const TransactionsList = (props) => {
-  const { t, ready } = useTranslation();
+  const { getAccessTokenSilently } = useAuth0();
+  const { t } = useTranslation();
   const [transactions, setTransactions] = React.useState([]);
   const [dialogState, setDialogState] = React.useState({
     isError: false,
@@ -50,8 +52,20 @@ const TransactionsList = (props) => {
       setTransactions(transactionsCopy);
     }
   }, [props.updatedOrCreatedTransaction]);
+  const getUserToken = async () => {
+    try {
+      return await getAccessTokenSilently({
+        audience: process.env.REACT_APP_Auth0_Audience,
+        scope: 'read:current_user'
+      });
+    } catch (e) {
+      console.log(e.message);
+    }
+  };
   const getDataFromServer = async () => {
     setDialogState({ ...dialogState, isLoading: true });
+    const accessToken = await getUserToken();
+    axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
     const newDialogState = { ...dialogState };
     try {
       const response = await axiosInstance.get('getAllTransaction');
@@ -73,7 +87,7 @@ const TransactionsList = (props) => {
     setDialogState({ ...dialogState, isLoading: true });
     const newDialogState = { ...dialogState };
     try {
-      await axiosInstance.delete('deleteTransaction', { id });
+      await axiosInstance.delete('deleteTransaction', { data: { id } });
       const transactionsCopy = [...transactions];
       const indexOfTransaction = transactionsCopy.findIndex(
         (transaction) => transaction.id === id

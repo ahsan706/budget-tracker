@@ -1,22 +1,18 @@
 import React from 'react';
 
+import { useAuth0 } from '@auth0/auth0-react';
 import Avatar from '@material-ui/core/Avatar';
-import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
-import Checkbox from '@material-ui/core/Checkbox';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Grid from '@material-ui/core/Grid';
-import Link from '@material-ui/core/Link';
 import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import PropTypes from 'prop-types';
+import { Redirect } from 'react-router-dom';
 
-import { useAuthContext } from '../../context/authContext';
-import CopyRight from '../UIComponents/CopyRight';
+import LoadingDialog from '../UIComponents/LoadingDialog';
 const useStyles = makeStyles((theme) => ({
   root: {
     height: '100vh'
@@ -32,18 +28,15 @@ const useStyles = makeStyles((theme) => ({
     backgroundPosition: 'center'
   },
   paper: {
-    margin: theme.spacing(8, 4),
     display: 'flex',
     flexDirection: 'column',
-    alignItems: 'center'
+    alignItems: 'center',
+    height: '100vh',
+    'justify-content': 'center'
   },
   avatar: {
     margin: theme.spacing(1),
     backgroundColor: theme.palette.secondary.main
-  },
-  form: {
-    width: '100%', // Fix IE 11 issue.
-    marginTop: theme.spacing(1)
   },
   submit: {
     margin: theme.spacing(3, 0, 2)
@@ -51,14 +44,26 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Login(props) {
+  const { loginWithRedirect, isAuthenticated, isLoading } = useAuth0();
   const classes = useStyles();
-  const auth = useAuthContext();
   const onSignInClicked = (event) => {
-    event.preventDefault(0);
-    auth.signIn();
-    props.history.replace('/');
+    event.preventDefault();
+    loginWithRedirect({
+      redirectUri: window.location.origin + '/login',
+      appState: props.location.state
+    });
   };
-  return (
+  return isLoading ? (
+    <LoadingDialog open={true} />
+  ) : isAuthenticated ? (
+    <Redirect
+      to={
+        props.location.state && props.location.state.redirectTo
+          ? props.location.state.redirectTo
+          : '/'
+      }
+    />
+  ) : (
     <Grid container component="main" className={classes.root}>
       <CssBaseline />
       <Grid item xs={false} sm={4} md={7} className={classes.image} />
@@ -68,35 +73,9 @@ export default function Login(props) {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign in
+            Authenticate Your Self Before Using App.
           </Typography>
           <form className={classes.form} noValidate>
-            <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
-              autoFocus
-            />
-            <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-            />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            />
             <Button
               type="submit"
               fullWidth
@@ -104,23 +83,8 @@ export default function Login(props) {
               color="primary"
               className={classes.submit}
               onClick={onSignInClicked}>
-              Sign In
+              Authenticate
             </Button>
-            <Grid container>
-              <Grid item xs>
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid>
-              <Grid item>
-                <Link href="#" variant="body2">
-                  {"Don't have an account? Sign Up"}
-                </Link>
-              </Grid>
-            </Grid>
-            <Box mt={5}>
-              <CopyRight />
-            </Box>
           </form>
         </div>
       </Grid>
@@ -128,5 +92,5 @@ export default function Login(props) {
   );
 }
 Login.propTypes = {
-  history: PropTypes.any
+  location: PropTypes.any
 };

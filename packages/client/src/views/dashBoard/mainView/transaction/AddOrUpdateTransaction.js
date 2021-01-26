@@ -116,9 +116,9 @@ const AddOrUpdateTransaction = (props) => {
       transactionDate: new Date(state.transactionDate).toISOString()
     };
     if (state.isEditMode) {
-      response = await axiosInstance.put('editTransaction', stateToServer);
+      response = await axiosInstance.put('editTransaction', { data: stateToServer });
     } else {
-      response = await axiosInstance.post('addTransaction', stateToServer);
+      response = await axiosInstance.post('addTransaction', { data: stateToServer });
     }
     return response.data.data;
   };

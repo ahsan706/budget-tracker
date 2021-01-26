@@ -11,6 +11,10 @@
       "add-transaction": "Lägg till transaktion"
     }
   },
+  "Login": {
+    "Authenticate": "Autentisera",
+    "AuthenticateText": "Autentisera dig själv innan du använder appen."
+  },
   "Common": {
     "ok": "Ok",
     "description": "Beskrivning",

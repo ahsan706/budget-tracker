@@ -7,7 +7,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import useTranslation from '../../../utils/translation';
 import AddOrUpdateTransaction from './transaction/AddOrUpdateTransaction';
 import TransactionsList from './transaction/transactionList/TransactionsList';
-
 const useStyles = makeStyles((theme) => ({
   addButton: {
     margin: theme.spacing(2)
@@ -42,6 +41,7 @@ export default function MainView() {
   const updatedOrCreatedTransaction = (transaction) => {
     setCreatedOrUpdatedTransaction(transaction);
   };
+
   return (
     <Paper>
       <Button

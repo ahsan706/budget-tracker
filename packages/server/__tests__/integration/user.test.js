@@ -1,8 +1,14 @@
 const supertest = require('supertest');
-const app = require('../../src/app');
-const request = supertest(app);
 
-describe('Transaction', () => {
+const app = require('../../src/app');
+
+const request = supertest(app);
+jest.mock('../../src/security/auth0', () => require('../mock/jwt'));
+jest.mock('../../src/config/constants', () => require('../mock/constant'));
+describe('User', () => {
+  beforeEach(async () => {
+    await request.get('/getAllTransaction').send();
+  });
   it('should be able to create Transaction', async () => {
     const addResponse = await request.post('/addTransaction').send({
       description: 'description',
@@ -18,14 +24,17 @@ describe('Transaction', () => {
       transactionDate: new Date('1111-11-11').toISOString()
     });
     expect(addResponse.status).toBe(200);
-
+    const addedTransaction = JSON.parse(addResponse.text).data;
     const getResponse = await request.get('/getAllTransaction').send();
     const transactionList = JSON.parse(getResponse.text).data;
     expect(transactionList.length).toBe(1);
+    const transaction = transactionList.find(
+      (transaction) => transaction._id === addedTransaction._id
+    );
     expect({
-      description: transactionList[0].description,
-      amount: transactionList[0].amount,
-      transactionDate: transactionList[0].transactionDate
+      description: transaction.description,
+      amount: transaction.amount,
+      transactionDate: transaction.transactionDate
     }).toEqual({
       description: 'description',
       amount: 123,
