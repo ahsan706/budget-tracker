@@ -142,9 +142,9 @@ const TransactionsList = (props) => {
   };
   const infoDialogText = () => {
     if (dialogState.isError) {
-      return ready && t('Common.error-message');
+      return t('Common.error-message');
     } else {
-      return ready && t('Common.transaction-deleted');
+      return t('Common.transaction-deleted');
     }
   };
   const handleErrorDialogueClose = async () => {
@@ -166,13 +166,9 @@ const TransactionsList = (props) => {
         <Table stickyHeader>
           <TableHead>
             <StyledTableRow key="header">
-              <StyledTableCell>
-                {ready ? t('Common.description') : null}
-              </StyledTableCell>
-              <StyledTableCell>{ready ? t('Common.amount') : null}</StyledTableCell>
-              <StyledTableCell>
-                {ready ? t('Common.transaction-date') : null}
-              </StyledTableCell>
+              <StyledTableCell>{t('Common.description')}</StyledTableCell>
+              <StyledTableCell>{t('Common.amount')}</StyledTableCell>
+              <StyledTableCell>{t('Common.transaction-date')}</StyledTableCell>
             </StyledTableRow>
           </TableHead>
           <TableBody>{renderTableData(transactions)}</TableBody>

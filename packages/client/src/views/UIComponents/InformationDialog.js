@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 
 import useTranslation from '../../utils/translation';
 export default function InformationDialog(props) {
-  const { t, ready } = useTranslation();
+  const { t } = useTranslation();
   return (
     <Dialog open={props.open}>
       <DialogContent>
@@ -17,7 +17,7 @@ export default function InformationDialog(props) {
       </DialogContent>
       <DialogActions>
         <Button onClick={props.onClose} color="primary" autoFocus>
-          {ready ? t('Common.ok') : null}
+          {t('Common.ok')}
         </Button>
       </DialogActions>
     </Dialog>

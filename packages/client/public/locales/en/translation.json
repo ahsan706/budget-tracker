@@ -9,11 +9,11 @@
     },
     "MainView": {
       "add-transaction": "Add Transaction"
+    },
+    "Login": {
+      "Authenticate": "Authenticate",
+      "AuthenticateText": "Authenticate Your Self Before Using App."
     }
-  },
-  "Login": {
-    "Authenticate": "Authenticate",
-    "AuthenticateText": "Authenticate Your Self Before Using App."
   },
   "Common": {
     "ok": "Ok",

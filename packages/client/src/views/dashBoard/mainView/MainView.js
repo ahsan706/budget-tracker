@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function MainView() {
   const classes = useStyles();
-  const { t, ready } = useTranslation();
+  const { t } = useTranslation();
   const [transactionToBeEdited, setTransactionToBeEdited] = React.useState(
     undefined
   );
@@ -48,7 +48,7 @@ export default function MainView() {
         className={classes.addButton}
         variant="contained"
         onClick={() => showAddTransaction()}>
-        {ready ? t('App.MainView.add-transaction') : null}
+        {t('App.MainView.add-transaction')}
       </Button>
       <AddOrUpdateTransaction
         editTransaction={transactionToBeEdited}

@@ -27,7 +27,7 @@ const useStyles = makeStyles(() => ({
 export default function Header(props) {
   const { logout } = useAuth0();
   const classes = useStyles();
-  const { t, i18n, ready } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const onChangeLanguage = (lang) => {
     i18n.changeLanguage(lang);
@@ -48,7 +48,7 @@ export default function Header(props) {
       <Toolbar>
         <AttachMoney />
         <Typography variant="h6" color="inherit" noWrap className={classes.title}>
-          {ready ? t('App.Header.title') : null}
+          {t('App.Header.title')}
         </Typography>
 
         <IconButton onClick={(event) => openChangeLanguagePopOver(event)}>

@@ -12,6 +12,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
 
+import useTranslation from '../../utils/translation';
 import LoadingDialog from '../UIComponents/LoadingDialog';
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -45,6 +46,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Login(props) {
   const { loginWithRedirect, isAuthenticated, isLoading } = useAuth0();
+  const { t } = useTranslation();
   const classes = useStyles();
   const onSignInClicked = (event) => {
     event.preventDefault();
@@ -73,7 +75,7 @@ export default function Login(props) {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Authenticate Your Self Before Using App.
+            {t('App.Login.AuthenticateText')}
           </Typography>
           <form className={classes.form} noValidate>
             <Button
@@ -83,7 +85,7 @@ export default function Login(props) {
               color="primary"
               className={classes.submit}
               onClick={onSignInClicked}>
-              Authenticate
+              {t('App.Login.Authenticate')}
             </Button>
           </form>
         </div>

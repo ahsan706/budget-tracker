@@ -53,7 +53,7 @@ const AddOrUpdateTransaction = (props) => {
   const [state, setState] = React.useState(initState);
   const [touched, setTouched] = React.useState(initTouchedAndValid);
   const [valid, setValid] = React.useState(initTouchedAndValid);
-  const { t, ready } = useTranslation();
+  const { t } = useTranslation();
   React.useEffect(() => {
     if (
       props.editTransaction !== undefined &&
@@ -159,16 +159,16 @@ const AddOrUpdateTransaction = (props) => {
   };
   const getTitleText = (isEditMode) => {
     if (isEditMode) {
-      return ready && t('Common.transaction-edited');
+      return t('Common.transaction-edited');
     } else {
-      return ready && t('Common.transaction-added');
+      return t('Common.transaction-added');
     }
   };
   const getButtonText = (isEditMode) => {
     if (isEditMode) {
-      return ready && t('Common.edit');
+      return t('Common.edit');
     } else {
-      return ready && t('Common.add');
+      return t('Common.add');
     }
   };
   const getFromPropsOrDefaultValue = (key) => {
@@ -187,12 +187,12 @@ const AddOrUpdateTransaction = (props) => {
   };
   const infoDialogText = () => {
     if (state.isError) {
-      return ready && t('Common.error-message');
+      return t('Common.error-message');
     } else {
       if (state.isEditMode) {
-        return ready && t('Common.transaction-edited');
+        return t('Common.transaction-edited');
       } else {
-        return ready && t('Common.transaction-added');
+        return t('Common.transaction-added');
       }
     }
   };
@@ -221,7 +221,7 @@ const AddOrUpdateTransaction = (props) => {
         onSubmit={(e) => formSubmit(e)}
         method="POST"
         className={props.classes.form}>
-        <InputLabel>{ready ? t('Common.description') : null}</InputLabel>
+        <InputLabel>{t('Common.description')}</InputLabel>
         <FilledInput
           type="text"
           name="description"
@@ -229,7 +229,7 @@ const AddOrUpdateTransaction = (props) => {
           error={touched.description && !valid.description}
           defaultValue={getFromPropsOrDefaultValue('description')}
         />
-        <InputLabel>{ready ? t('Common.amount') : null}</InputLabel>
+        <InputLabel>{t('Common.amount')}</InputLabel>
         <FilledInput
           type="number"
           name="amount"
@@ -237,7 +237,7 @@ const AddOrUpdateTransaction = (props) => {
           onChange={(event) => myChangeHandler(event)}
           defaultValue={getFromPropsOrDefaultValue('amount')}
         />
-        <InputLabel>{ready ? t('Common.transaction-date') : null}</InputLabel>
+        <InputLabel>{t('Common.transaction-date')}</InputLabel>
         <FilledInput
           type="date"
           name="transactionDate"
