@@ -5066,21 +5066,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"braces@npm:^3.0.1, braces@npm:~3.0.2":
-  version: 3.0.2
-  resolution: "braces@npm:3.0.2"
-  dependencies:
-    fill-range: "npm:^7.0.1"
-  checksum: 10c0/321b4d675791479293264019156ca322163f02dc06e3c4cab33bb15cd43d80b51efef69b0930cfde3acd63d126ebca24cd0544fa6f261e093a0fb41ab9dda381
-  languageName: node
-  linkType: hard
-
 "braces@npm:^3.0.3":
   version: 3.0.3
   resolution: "braces@npm:3.0.3"
   dependencies:
     fill-range: "npm:^7.1.1"
   checksum: 10c0/7c6dfd30c338d2997ba77500539227b9d1f85e388a5f43220865201e407e076783d0881f2d297b9f80951b4c957fcf0b51c1d2d24227631643c3f7c284b0aa04
+  languageName: node
+  linkType: hard
+
+"braces@npm:~3.0.2":
+  version: 3.0.2
+  resolution: "braces@npm:3.0.2"
+  dependencies:
+    fill-range: "npm:^7.0.1"
+  checksum: 10c0/321b4d675791479293264019156ca322163f02dc06e3c4cab33bb15cd43d80b51efef69b0930cfde3acd63d126ebca24cd0544fa6f261e093a0fb41ab9dda381
   languageName: node
   linkType: hard
 
@@ -10342,17 +10342,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"micromatch@npm:^4.0.2":
-  version: 4.0.2
-  resolution: "micromatch@npm:4.0.2"
-  dependencies:
-    braces: "npm:^3.0.1"
-    picomatch: "npm:^2.0.5"
-  checksum: 10c0/f87c8d711283c95d3812f2c68bfb4c158ae2a1fa95442fb1ec7d308e9e2af6c916c34f547b1753442187e66b558b3b032b55ef657beec2303553012312743ef7
-  languageName: node
-  linkType: hard
-
-"micromatch@npm:^4.0.4, micromatch@npm:^4.0.5, micromatch@npm:^4.0.8":
+"micromatch@npm:^4.0.2, micromatch@npm:^4.0.4, micromatch@npm:^4.0.5, micromatch@npm:^4.0.8":
   version: 4.0.8
   resolution: "micromatch@npm:4.0.8"
   dependencies:
@@ -11307,7 +11297,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"picomatch@npm:^2.0.5, picomatch@npm:^2.2.1, picomatch@npm:^2.2.2":
+"picomatch@npm:^2.2.1, picomatch@npm:^2.2.2":
   version: 2.2.2
   resolution: "picomatch@npm:2.2.2"
   checksum: 10c0/0fa37cfc2ceaf7cc1021ec1936841351a2fcbcfbb50540994a4531c77ac613dd78ef9d2ee93b1afc18c02642a9a51e5115c728427fc1f1df2b5d231b720569f0
