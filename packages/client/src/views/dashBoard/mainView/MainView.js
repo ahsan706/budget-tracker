@@ -1,32 +1,20 @@
 import React from 'react';
 
-import Button from '@material-ui/core/Button';
-import Paper from '@material-ui/core/Paper';
-import { makeStyles } from '@material-ui/core/styles';
+import Button from '@mui/material/Button';
+import Paper from '@mui/material/Paper';
 
-import useTranslation from '../../../utils/translation';
 import AddOrUpdateTransaction from './transaction/AddOrUpdateTransaction';
 import TransactionsList from './transaction/transactionList/TransactionsList';
-const useStyles = makeStyles((theme) => ({
-  addButton: {
-    margin: theme.spacing(2)
-  }
-}));
+import useTranslation from '../../../utils/translation';
 
 export default function MainView() {
-  const classes = useStyles();
   const { t } = useTranslation();
-  const [transactionToBeEdited, setTransactionToBeEdited] = React.useState(
-    undefined
-  );
-  const [
-    createdOrUpdatedTransaction,
-    setCreatedOrUpdatedTransaction
-  ] = React.useState(undefined);
-  const [
-    openAddOrUpdateTransactionView,
-    setOpenAddOrUpdateTransactionView
-  ] = React.useState(false);
+  const [transactionToBeEdited, setTransactionToBeEdited] =
+    React.useState(undefined);
+  const [createdOrUpdatedTransaction, setCreatedOrUpdatedTransaction] =
+    React.useState(undefined);
+  const [openAddOrUpdateTransactionView, setOpenAddOrUpdateTransactionView] =
+    React.useState(false);
   const showAddTransaction = () => {
     setOpenAddOrUpdateTransactionView(true);
   };
@@ -45,9 +33,10 @@ export default function MainView() {
   return (
     <Paper>
       <Button
-        className={classes.addButton}
+        sx={{ margin: 2 }}
         variant="contained"
-        onClick={() => showAddTransaction()}>
+        onClick={() => showAddTransaction()}
+      >
         {t('App.MainView.add-transaction')}
       </Button>
       <AddOrUpdateTransaction

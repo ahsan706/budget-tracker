@@ -4,8 +4,6 @@ const jwt = require('./security/auth0');
 const getRoutes = require('./routes/transactionRoutes');
 
 const databaseHelper = require('./helper/database');
-
-require('dotenv').config({ path: './.env' });
 const database = () => {
   databaseHelper.connect().then(
     () => {

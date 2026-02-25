@@ -1,4 +1,4 @@
-const NodeEnvironment = require('jest-environment-node');
+const { TestEnvironment: NodeEnvironment } = require('jest-environment-node');
 
 const MemoryDatabaseServer = require('./MemoryDatabaseServer');
 

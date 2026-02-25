@@ -1,6 +1,6 @@
 module.exports = () => {
   return (req, res, next) => {
-    req.user = {
+    req.auth = {
       sub: 'test'
     };
     next();

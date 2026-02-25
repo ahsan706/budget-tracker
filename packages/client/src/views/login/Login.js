@@ -1,90 +1,75 @@
-import React from 'react';
-
 import { useAuth0 } from '@auth0/auth0-react';
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
-import { makeStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import PropTypes from 'prop-types';
-import { Redirect } from 'react-router-dom';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import CssBaseline from '@mui/material/CssBaseline';
+import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
+import { Navigate, useLocation } from 'react-router-dom';
 
 import useTranslation from '../../utils/translation';
 import LoadingDialog from '../UIComponents/LoadingDialog';
-const useStyles = makeStyles((theme) => ({
-  root: {
-    height: '100vh'
-  },
-  image: {
-    backgroundImage: 'url(https://source.unsplash.com/random)',
-    backgroundRepeat: 'no-repeat',
-    backgroundColor:
-      theme.palette.type === 'light'
-        ? theme.palette.grey[50]
-        : theme.palette.grey[900],
-    backgroundSize: 'cover',
-    backgroundPosition: 'center'
-  },
-  paper: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    height: '100vh',
-    'justify-content': 'center'
-  },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2)
-  }
-}));
 
-export default function Login(props) {
+export default function Login() {
   const { loginWithRedirect, isAuthenticated, isLoading } = useAuth0();
   const { t } = useTranslation();
-  const classes = useStyles();
+  const location = useLocation();
+
   const onSignInClicked = (event) => {
     event.preventDefault();
     loginWithRedirect({
-      redirectUri: window.location.origin + '/login',
-      appState: props.location.state
+      authorizationParams: {
+        redirect_uri: window.location.origin + '/login'
+      },
+      appState: location.state
     });
   };
+
   return isLoading ? (
     <LoadingDialog open={true} />
   ) : isAuthenticated ? (
-    <Redirect
-      to={
-        props.location.state && props.location.state.redirectTo
-          ? props.location.state.redirectTo
-          : '/'
-      }
-    />
+    <Navigate to={location.state?.redirectTo ?? '/'} replace />
   ) : (
-    <Grid container component="main" className={classes.root}>
+    <Grid container component="main" sx={{ height: '100vh' }}>
       <CssBaseline />
-      <Grid item xs={false} sm={4} md={7} className={classes.image} />
-      <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
-        <div className={classes.paper}>
-          <Avatar className={classes.avatar}>
+      <Grid
+        size={{ sm: 4, md: 7 }}
+        sx={{
+          display: { xs: 'none', sm: 'block' },
+          backgroundImage: 'url(https://picsum.photos/800/1200)',
+          backgroundRepeat: 'no-repeat',
+          bgcolor: (theme) =>
+            theme.palette.mode === 'light' ? 'grey.50' : 'grey.900',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center'
+        }}
+      />
+      <Grid size={{ xs: 12, sm: 8, md: 5 }} component={Paper} elevation={6} square>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            height: '100vh',
+            justifyContent: 'center'
+          }}
+        >
+          <Avatar sx={{ margin: 1, bgcolor: 'secondary.main' }}>
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
             {t('App.Login.AuthenticateText')}
           </Typography>
-          <form className={classes.form} noValidate>
+          <form noValidate>
             <Button
               type="submit"
               fullWidth
               variant="contained"
               color="primary"
-              className={classes.submit}
-              onClick={onSignInClicked}>
+              sx={{ margin: (theme) => theme.spacing(3, 0, 2) }}
+              onClick={onSignInClicked}
+            >
               {t('App.Login.Authenticate')}
             </Button>
           </form>
@@ -93,6 +78,3 @@ export default function Login(props) {
     </Grid>
   );
 }
-Login.propTypes = {
-  location: PropTypes.any
-};

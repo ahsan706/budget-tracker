@@ -1,7 +1,7 @@
 import React from 'react';
 
-import CircularProgress from '@material-ui/core/CircularProgress';
-import Dialog from '@material-ui/core/Dialog';
+import CircularProgress from '@mui/material/CircularProgress';
+import Dialog from '@mui/material/Dialog';
 import PropTypes from 'prop-types';
 export default function LoadingDialog(props) {
   return (

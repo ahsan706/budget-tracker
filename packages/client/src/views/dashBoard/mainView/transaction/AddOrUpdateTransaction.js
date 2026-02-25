@@ -1,13 +1,12 @@
 import React from 'react';
 
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import FilledInput from '@material-ui/core/FilledInput';
-import IconButton from '@material-ui/core/IconButton';
-import InputLabel from '@material-ui/core/InputLabel';
-import { withStyles } from '@material-ui/core/styles';
-import CloseIcon from '@material-ui/icons/Close';
+import CloseIcon from '@mui/icons-material/Close';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import FilledInput from '@mui/material/FilledInput';
+import IconButton from '@mui/material/IconButton';
+import InputLabel from '@mui/material/InputLabel';
 import PropTypes from 'prop-types';
 
 import axiosInstance from '../../../../axios/axios';
@@ -20,20 +19,7 @@ import useTranslation from '../../../../utils/translation';
 import { filterKeyFromObject } from '../../../../utils/utils';
 import InformationDialog from '../../../UIComponents/InformationDialog';
 import LoadingDialog from '../../../UIComponents/LoadingDialog';
-const styles = (theme) => ({
-  form: {
-    padding: theme.spacing(2),
-    display: 'flex',
-    gap: theme.spacing(2),
-    'flex-direction': 'column'
-  },
-  topRight: {
-    position: 'absolute',
-    right: 0,
-    top: 0,
-    color: theme.palette.grey[500]
-  }
-});
+
 const initState = {
   id: -1,
   description: '',
@@ -116,9 +102,9 @@ const AddOrUpdateTransaction = (props) => {
       transactionDate: new Date(state.transactionDate).toISOString()
     };
     if (state.isEditMode) {
-      response = await axiosInstance.put('editTransaction', { data: stateToServer });
+      response = await axiosInstance.put('editTransaction', stateToServer);
     } else {
-      response = await axiosInstance.post('addTransaction', { data: stateToServer });
+      response = await axiosInstance.post('addTransaction', stateToServer);
     }
     return response.data.data;
   };
@@ -213,14 +199,16 @@ const AddOrUpdateTransaction = (props) => {
       onClose={() => handleClose()}
       open={props.open}
       fullWidth={true}
-      maxWidth={false}>
+      maxWidth={false}
+    >
       <DialogTitle id="simple-dialog-title">
         {getTitleText(state.isEditMode)}
       </DialogTitle>
       <form
         onSubmit={(e) => formSubmit(e)}
         method="POST"
-        className={props.classes.form}>
+        style={{ padding: 16, display: 'flex', gap: 16, flexDirection: 'column' }}
+      >
         <InputLabel>{t('Common.description')}</InputLabel>
         <FilledInput
           type="text"
@@ -251,12 +239,15 @@ const AddOrUpdateTransaction = (props) => {
                   .split('T')[0]
           }
         />
-        <Button variant="contained" disabled={enableButton()}>
+        <Button type="submit" variant="contained" disabled={enableButton()}>
           {getButtonText(state.isEditMode)}
         </Button>
         <LoadingDialog open={state.isLoading} />
       </form>
-      <IconButton onClick={() => handleClose()} className={props.classes.topRight}>
+      <IconButton
+        onClick={() => handleClose()}
+        sx={{ position: 'absolute', right: 0, top: 0, color: 'grey.500' }}
+      >
         <CloseIcon />
       </IconButton>
       <InformationDialog
@@ -271,7 +262,6 @@ AddOrUpdateTransaction.propTypes = {
   editTransaction: PropTypes.any,
   updatedOrCreatedTransaction: PropTypes.func,
   dialogClosed: PropTypes.func,
-  open: PropTypes.bool,
-  classes: PropTypes.object.isRequired
+  open: PropTypes.bool
 };
-export default withStyles(styles)(AddOrUpdateTransaction);
+export default AddOrUpdateTransaction;

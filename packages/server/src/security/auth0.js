@@ -1,4 +1,4 @@
-const jwt = require('express-jwt');
+const { expressjwt: jwt } = require('express-jwt');
 const jwksRsa = require('jwks-rsa');
 
 // Authorization middleware. When used, the

@@ -2,8 +2,19 @@ let dbPath = 'mongodb://localhost/budget-tracker';
 if (process.env.NODE_ENV === 'test') {
   dbPath = global.__DB_URL__;
 }
-if (process.env.DB_URL && process.env.DB_PASSWORD && process.env.DB_NAME) {
-  dbPath = `mongodb+srv://${process.env.DB_URL}:${process.env.DB_PASSWORD}@cluster0.idfhi.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`;
+console.log(
+  process.env.DB_URL,
+  process.env.DB_PASSWORD,
+  process.env.DB_NAME,
+  process.env.DB_USERNAME
+);
+if (
+  process.env.DB_URL &&
+  process.env.DB_PASSWORD &&
+  process.env.DB_NAME &&
+  process.env.DB_USERNAME
+) {
+  dbPath = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_URL}?appName=${process.env.DB_NAME}`;
 }
 const port = process.env.PORT || 8080;
 const demoTransactionCount = 10;

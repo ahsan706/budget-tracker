@@ -2,9 +2,9 @@ const mongoose = require('mongoose');
 const { dbPath } = require('../config/constants');
 
 const connect = async () => {
+  console.log('Connecting to database...', dbPath);
   if (mongoose.connection.readyState === 0) {
-    const options = { useNewUrlParser: true, useUnifiedTopology: true };
-    return mongoose.connect(dbPath, options);
+    return mongoose.connect(dbPath);
   }
 };
 

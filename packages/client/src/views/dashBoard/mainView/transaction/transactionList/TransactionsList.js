@@ -1,32 +1,24 @@
 import React, { Fragment } from 'react';
 
 import { useAuth0 } from '@auth0/auth0-react';
-import Grid from '@material-ui/core/Grid';
-import IconButton from '@material-ui/core/IconButton';
-import { withStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import Typography from '@material-ui/core/Typography';
-import DeleteIcon from '@material-ui/icons/Delete';
-import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+import Grid from '@mui/material/Grid';
+import IconButton from '@mui/material/IconButton';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import Typography from '@mui/material/Typography';
 import PropTypes from 'prop-types';
 
+import StyledTableCell from './table/StyledTableCell';
+import StyledTableRow from './table/StyledTableRow';
 import axiosInstance from '../../../../../axios/axios';
 import useTranslation from '../../../../../utils/translation';
 import InformationDialog from '../../../../UIComponents/InformationDialog';
 import LoadingDialog from '../../../../UIComponents/LoadingDialog';
-import StyledTableCell from './table/StyledTableCell';
-import StyledTableRow from './table/StyledTableRow';
-const styles = (theme) => ({
-  root: {
-    width: '100%',
-    height: '74vh',
-    overflow: 'auto',
-    padding: `0 ${theme.spacing(1)} 0 ${theme.spacing(1)}`
-  }
-});
+
 const TransactionsList = (props) => {
   const { getAccessTokenSilently } = useAuth0();
   const { t } = useTranslation();
@@ -79,7 +71,9 @@ const TransactionsList = (props) => {
       setDialogState(newDialogState);
     }
   };
-  React.useEffect(async () => getDataFromServer(), []);
+  React.useEffect(() => {
+    getDataFromServer();
+  }, []);
   const onEditTransaction = (id) => {
     props.editTransaction(transactions.find((transaction) => transaction.id === id));
   };
@@ -114,19 +108,19 @@ const TransactionsList = (props) => {
           <StyledTableCell>{amount}</StyledTableCell>
           <StyledTableCell>
             <Grid container>
-              <Grid item xs={9}>
+              <Grid size={9}>
                 <Typography>
                   {new Date(transactionDate).toLocaleDateString()}
                 </Typography>
               </Grid>
-              <Grid item xs={3}>
+              <Grid size={3}>
                 <Grid container>
-                  <Grid item xs={5}>
+                  <Grid size={5}>
                     <IconButton onClick={() => onEditTransaction(id)}>
                       <EditIcon />
                     </IconButton>
                   </Grid>
-                  <Grid item xs={5}>
+                  <Grid size={5}>
                     <IconButton onClick={() => onDeleteTransaction(id)}>
                       <DeleteIcon />
                     </IconButton>
@@ -162,7 +156,10 @@ const TransactionsList = (props) => {
   };
   return (
     <Fragment>
-      <TableContainer className={props.classes.root} aria-label="customized table">
+      <TableContainer
+        sx={{ width: '100%', height: '74vh', overflow: 'auto', px: 1 }}
+        aria-label="customized table"
+      >
         <Table stickyHeader>
           <TableHead>
             <StyledTableRow key="header">
@@ -185,7 +182,6 @@ const TransactionsList = (props) => {
 };
 TransactionsList.propTypes = {
   editTransaction: PropTypes.func,
-  updatedOrCreatedTransaction: PropTypes.any,
-  classes: PropTypes.object.isRequired
+  updatedOrCreatedTransaction: PropTypes.any
 };
-export default withStyles(styles)(TransactionsList);
+export default TransactionsList;

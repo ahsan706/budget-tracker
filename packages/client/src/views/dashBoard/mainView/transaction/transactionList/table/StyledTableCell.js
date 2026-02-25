@@ -1,12 +1,14 @@
-import { withStyles } from '@material-ui/core/styles';
-import TableCell from '@material-ui/core/TableCell';
-const StyledTableCell = withStyles((theme) => ({
-  head: {
+import { styled } from '@mui/material/styles';
+import TableCell from '@mui/material/TableCell';
+
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  '&.MuiTableCell-head': {
     backgroundColor: theme.palette.common.black,
     color: theme.palette.common.white
   },
-  body: {
+  '&.MuiTableCell-body': {
     fontSize: 14
   }
-}))(TableCell);
+}));
+
 export default StyledTableCell;
