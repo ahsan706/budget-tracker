@@ -47,7 +47,7 @@ const TransactionsList = (props) => {
   const getUserToken = async () => {
     try {
       return await getAccessTokenSilently({
-        audience: process.env.REACT_APP_Auth0_Audience,
+        audience: import.meta.env.VITE_Auth0_Audience,
         scope: 'read:current_user'
       });
     } catch (e) {

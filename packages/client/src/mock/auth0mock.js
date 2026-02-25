@@ -4,8 +4,8 @@ const auth0Mock = {
     return {
       isAuthenticated: true,
       user: {},
-      logout: jest.fn(),
-      loginWithRedirect: jest.fn()
+      logout: vi.fn(),
+      loginWithRedirect: vi.fn()
     };
   },
   Auth0Provider: (opts) => {

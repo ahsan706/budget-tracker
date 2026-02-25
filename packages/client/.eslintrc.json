@@ -19,7 +19,8 @@
   "settings": {
     "react": {
       "version": "detect"
-    }
+    },
+    "import/ignore": ["vite"]
   },
   "plugins": ["react"],
   "rules": {

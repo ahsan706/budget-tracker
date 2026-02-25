@@ -28,11 +28,11 @@ export default function App() {
       {translationLoaded ? (
         <BrowserRouter>
           <Auth0Provider
-            domain={process.env.REACT_APP_Auth0_Domain}
-            clientId={process.env.REACT_APP_Auth0_ClientId}
+            domain={import.meta.env.VITE_Auth0_Domain}
+            clientId={import.meta.env.VITE_Auth0_ClientId}
             authorizationParams={{
               redirect_uri: window.location.origin + '/login',
-              audience: process.env.REACT_APP_Auth0_Audience,
+              audience: import.meta.env.VITE_Auth0_Audience,
               scope: 'read:current_user update:current_user_metadata'
             }}
           >
