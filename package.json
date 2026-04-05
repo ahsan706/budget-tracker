@@ -32,7 +32,17 @@
   "devDependencies": {
     "concurrently": "^9.2.1",
     "husky": "^9.1.7",
-    "lint-staged": "^16.3.2"
+    "lint-staged": "^16.4.0"
+  },
+  "resolutions": {
+    "path-to-regexp": "^8.4.0",
+    "brace-expansion": "^1.1.13",
+    "picomatch": "^2.3.2",
+    "yaml": "^1.10.3",
+    "flatted": "^3.4.2",
+    "yauzl": "^3.2.1",
+    "undici": "^7.24.1",
+    "tar": "^7.5.11"
   },
   "packageManager": "yarn@4.12.0"
 }
