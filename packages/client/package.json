@@ -11,7 +11,7 @@
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
     "@testing-library/user-event": "^14.6.1",
-    "axios": "^1.14.0",
+    "axios": "^1.15.0",
     "i18next": "^26.0.3",
     "i18next-browser-languagedetector": "^8.2.1",
     "i18next-http-backend": "^3.0.4",
@@ -55,7 +55,7 @@
     "eslint-plugin-react": "^7.37.5",
     "jsdom": "^29.0.1",
     "prettier": "^3.8.1",
-    "vite": "^8.0.3",
+    "vite": "^8.0.5",
     "vitest": "^4.1.2"
   }
 }
