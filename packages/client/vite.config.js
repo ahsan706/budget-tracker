@@ -1,25 +1,28 @@
 import react from '@vitejs/plugin-react';
-import { defineConfig, transformWithEsbuild } from 'vite';
+import { defineConfig, transformWithOxc } from 'vite';
 
 export default defineConfig({
   plugins: [
     // Pre-transform .js files with JSX so Vitest's SSR parser can handle them
     {
       name: 'treat-js-files-as-jsx',
+      enforce: 'pre',
       async transform(code, id) {
         if (!id.match(/src\/.*\.js$/)) return null;
-        return transformWithEsbuild(code, id, {
-          loader: 'jsx',
-          jsx: 'automatic',
-          jsxImportSource: 'react'
+        return transformWithOxc(code, id, {
+          lang: 'jsx',
+          jsx: {
+            runtime: 'automatic',
+            importSource: 'react'
+          }
         });
       }
     },
     react()
   ],
   optimizeDeps: {
-    esbuildOptions: {
-      loader: {
+    rolldownOptions: {
+      moduleTypes: {
         '.js': 'jsx'
       }
     }
