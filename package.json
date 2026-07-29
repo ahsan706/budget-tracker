@@ -36,7 +36,7 @@
   },
   "resolutions": {
     "path-to-regexp": "^8.4.0",
-    "brace-expansion": "^1.1.13",
+    "brace-expansion": "^1.1.16",
     "picomatch": "^2.3.2",
     "yaml": "^1.10.3",
     "flatted": "^3.4.2",
