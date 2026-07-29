@@ -4,6 +4,9 @@
   "author": "Ahsan",
   "license": "MIT",
   "private": true,
+  "engines": {
+    "node": ">=22"
+  },
   "workspaces": [
     "./packages/client",
     "./packages/server"
