@@ -23,7 +23,7 @@
   },
   "scripts": {
     "start": "yarn exec vite",
-    "build": "yarn exec vite -- build",
+    "build": "vite build",
     "preview": "yarn exec vite -- preview",
     "test": "yarn exec vitest -- run",
     "test:staged": "yarn exec vitest -- related --run",
@@ -44,6 +44,7 @@
     ]
   },
   "devDependencies": {
+    "@eslint/compat": "^2.1.1",
     "@testing-library/dom": "^10.4.1",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
@@ -53,6 +54,7 @@
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-react": "^7.37.5",
+    "globals": "^17.12.0",
     "jsdom": "^29.0.1",
     "prettier": "^3.8.1",
     "vite": "~8.0.16",

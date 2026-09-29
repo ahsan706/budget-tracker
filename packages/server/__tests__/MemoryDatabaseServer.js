@@ -1,7 +1,7 @@
 const { MongoMemoryServer } = require('mongodb-memory-server');
 const mongod = new MongoMemoryServer({
   binary: {
-    version: '4.2.0'
+    version: '8.2.1'
   },
   autoStart: false
 });

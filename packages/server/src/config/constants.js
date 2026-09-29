@@ -1,14 +1,7 @@
 let dbPath = 'mongodb://localhost/budget-tracker';
 if (process.env.NODE_ENV === 'test') {
   dbPath = global.__DB_URL__;
-}
-console.log(
-  process.env.DB_URL,
-  process.env.DB_PASSWORD,
-  process.env.DB_NAME,
-  process.env.DB_USERNAME
-);
-if (
+} else if (
   process.env.DB_URL &&
   process.env.DB_PASSWORD &&
   process.env.DB_NAME &&
