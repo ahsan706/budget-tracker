@@ -12,6 +12,7 @@
     "./packages/server"
   ],
   "resolutions": {
+    "concurrently/shell-quote": "1.12.0",
     "glob": "13.0.6",
     "test-exclude": "7.0.1"
   },
